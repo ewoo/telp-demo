@@ -9,6 +9,21 @@ Open **`vault-prototype.html`** in a browser. Either:
 - Double-click the file, **or**
 - Serve the folder: `npx -y serve mocks -l 4321` → open http://localhost:4321/vault-prototype.html
 
+## Run it on your iPhone (the convincing demo)
+
+Hosted via GitHub Pages: **https://ewoo.github.io/telp-demo/**
+
+One-time Pages setup (repo → Settings → Pages → Source: `main` / root → Save).
+
+On the iPhone, for a fullscreen, native-looking app:
+
+1. Open **https://ewoo.github.io/telp-demo/** in **Safari** (Safari required for fullscreen).
+2. **Share → Add to Home Screen → Add.**
+3. Launch the green **Vault** icon — it opens fullscreen, no Safari bars.
+4. Drive the demo with the floating **DEMO** button (bottom-right): pick a beat, then tap the answer chips.
+
+> Loads once and runs entirely on-device — flaky room WiFi won't break it mid-demo. Load it before you walk up, and tap **DEMO → Reset** right before presenting.
+
 ## How to demo it
 
 The **three Beat chips** above the phone drive the whole story:
