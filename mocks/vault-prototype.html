@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Vault — Interactive Prototype (Team 7)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<title>Vault</title>
+<!-- Add to Home Screen → launches fullscreen like a native app -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Vault" />
+<meta name="theme-color" content="#0a5c4f" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%230a5c4f'/%3E%3Ctext x='50%25' y='54%25' font-family='-apple-system,Helvetica' font-size='104' font-weight='800' fill='%2312a589' text-anchor='middle' dominant-baseline='middle'%3EV%3C/text%3E%3C/svg%3E" />
 <style>
   :root{
     --ink:#0b1220; --muted:#6b7280; --line:#e9ebf1; --bg:#f4f5f8;
@@ -29,6 +36,7 @@
     box-shadow:0 30px 70px rgba(0,0,0,.55),inset 0 0 0 2px #2a2a2a;position:relative}
   .screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:38px;
     overflow:hidden;color:var(--ink);display:flex;flex-direction:column}
+  #app{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
   .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:27px;
     background:#000;border-radius:0 0 18px 18px;z-index:30}
   .status{height:50px;display:flex;align-items:flex-end;justify-content:space-between;
@@ -116,6 +124,32 @@
   .resetbtn{position:fixed;top:18px;right:18px;background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;z-index:50}
   h3.sec{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:4px 2px 8px}
   .note{font-size:11px;color:#9aa3b8;margin-top:14px;text-align:center}
+
+  /* On-device demo control — hidden on desktop, shown on phone/standalone */
+  #democtl{display:none;position:fixed;z-index:60;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));
+    flex-direction:column;align-items:flex-end;gap:8px}
+  #demomenu{display:none;flex-direction:column;gap:8px;background:#11182b;border:1px solid #2c3a63;
+    border-radius:14px;padding:10px}
+  #demomenu.open{display:flex}
+  #demomenu button{background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:10px;
+    padding:11px 14px;font-size:13px;font-weight:600;text-align:left}
+  #demomenu button.scam{border-color:#5b2330;color:#ffd2d2}
+  #demofab{width:54px;height:54px;border-radius:50%;background:#0a5c4f;color:#fff;border:2px solid #12a589;
+    font-size:11px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+
+  /* FULLSCREEN APP MODE — real iPhone (standalone) or narrow screens */
+  @media (display-mode:standalone), (max-width:480px){
+    body{padding:0;background:#000;justify-content:flex-start}
+    .head,.note,.resetbtn{display:none}
+    .phone{width:100vw;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none}
+    .phone .screen{border-radius:0}
+    .phone .notch,.phone .home{display:none}      /* real iPhone provides these */
+    .phone .status{display:none}                   /* use the real status bar */
+    .brandbar{padding-top:calc(14px + env(safe-area-inset-top))}
+    .nav{padding-top:calc(8px + env(safe-area-inset-top))}
+    .tabbar{padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+    #democtl{display:flex}
+  }
 </style>
 </head>
 <body>
@@ -137,6 +171,17 @@
     <div class="home"></div>
   </div></div>
   <div class="note">Prototype · scripted AI responses · no backend. Use the answer chips in Beat 2 / Beat 3 so every run is identical.</div>
+
+  <!-- On-device demo control (phone / Add-to-Home-Screen only) -->
+  <div id="democtl">
+    <div id="demomenu">
+      <button onclick="pickBeat('routine')">▶ Beat 1 · Routine</button>
+      <button onclick="pickBeat('honest')">▶ Beat 2 · Large but honest</button>
+      <button class="scam" onclick="pickBeat('scam')">▶ Beat 3 · The scam</button>
+      <button onclick="pickBeat('reset')">↺ Reset</button>
+    </div>
+    <button id="demofab" onclick="toggleDemoMenu()">DEMO</button>
+  </div>
 
 <script>
 // ---------------------------------------------------------------------------
@@ -402,6 +447,12 @@ function audit(){
       <div class="chainok">✓ Chain verified · ${S.audit.length} entries · genesis → head intact</div>
     </div>
   </div>`+tabbar('audit');
+}
+
+function toggleDemoMenu(){ document.getElementById('demomenu').classList.toggle('open'); }
+function pickBeat(k){
+  document.getElementById('demomenu').classList.remove('open');
+  if(k==='reset') reset(); else startBeat(k);
 }
 
 reset();
