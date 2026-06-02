@@ -1,0 +1,16 @@
+{
+  "name": "fortress",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fortress — the most secure account on the market. AI second-pair-of-eyes against APP fraud at the point of payment.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.70.0",
+    "dotenv": "^17.0.0",
+    "express": "^5.0.0"
+  }
+}

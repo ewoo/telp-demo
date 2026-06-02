@@ -1,6 +1,8 @@
-# Vault — Team Plan & Build Brief
+# Fortress — Team Plan & Build Brief
 
 > **The most secure account on the market.** An online banking concept where security *is* the product — built for a world where the attacker has the same AI we do.
+>
+> *Bank: **Fortress** · AI guardian feature: **Sentinel** ("the second pair of eyes").*
 >
 > **Team 7 · Build Sprint · ~60 min build · 4 min demo**
 
@@ -10,11 +12,11 @@
 
 For a century, banks won because they were harder to fool than their customers. Frontier AI is breaking that: cloned voices beat phone auth, deepfakes clear video KYC, scams run at machine scale. Every incumbent still defends the perimeter against *last decade's* attacker.
 
-**Vault assumes the attacker already has the same models we do — and makes security the product, not the fine print.**
+**Fortress assumes the attacker already has the same models we do — and makes security the product, not the fine print.**
 
 Our wedge is the threat the old stack is blind to: **AI-driven fraud and coercion at the point of payment.** Traditional controls are deterministic rules on structured data, so they cannot see **Authorised Push Payment (APP) fraud** — where the customer is *tricked into sending the money themselves*, and every signal says the transaction is legitimate. The real signal lives in **unstructured human behaviour** — exactly what an LLM can read and a rules engine cannot.
 
-So Vault adds **a second pair of eyes when money moves.** A cheap rules layer decides whether a payment needs a closer look. When it fires, an AI opens a short, adaptive conversation grounded in real scam patterns, reads the answers, and **holds the payment before the money's gone.** Every step is logged to an **immutable audit trail** — the proof of an effective warning that UK reimbursement rules require. Underneath: a back end built to **assume breach**, so security holds even as adversary tooling improves.
+So Fortress adds **a second pair of eyes when money moves.** A cheap rules layer decides whether a payment needs a closer look. When it fires, an AI opens a short, adaptive conversation grounded in real scam patterns, reads the answers, and **holds the payment before the money's gone.** Every step is logged to an **immutable audit trail** — the proof of an effective warning that UK reimbursement rules require. Underneath: a back end built to **assume breach**, so security holds even as adversary tooling improves.
 
 Not a bank with more features. The most secure account on the market, for people who get that "secure" no longer means what it used to.
 
@@ -26,7 +28,7 @@ Three core banking capabilities, with the payment flow as the hero:
 
 1. **List accounts** — a dashboard of the customer's accounts with masked numbers and balances.
 2. **See balance & transactions** — an account detail view.
-3. **Make a payment** — the centrepiece, where the Vault intervention lives.
+3. **Make a payment** — the centrepiece, where the Fortress intervention lives.
 
 The first two are table stakes, built fast. All the differentiation is in **how a payment is handled.**
 
@@ -121,7 +123,7 @@ Everything below is seeded in `server/data.js` as an in-memory store and **reset
 
 ```
 Alex Morgan
-Customer since 2019 · Vault Premier
+Customer since 2019 · Fortress Premier
 Daily payment limit: £10,000
 ```
 
@@ -215,7 +217,7 @@ Maps to the three judge questions: *what & why · what's distinctive · what's n
 
 **Open with the problem (≈45s).** APP fraud, AI-scale scams, the blind spot in deterministic rules. Land the line: *"every signal says the transaction is legitimate."*
 
-**Beat 1 — Routine payment (≈10s).** Pay the trusted landlord £1,200 → clears instantly, balance ticks down. *"Vault is invisible when it's safe."*
+**Beat 1 — Routine payment (≈10s).** Pay the trusted landlord £1,200 → clears instantly, balance ticks down. *"Fortress is invisible when it's safe."*
 
 **Beat 2 — Large payment, honest story (≈45s, optional).** £8,000 to a brand-new payee → review fires → AI asks what it's for → *"buying a used car from a dealer I found myself"* → no coercion fingerprint → **released.** *"It doesn't just block big payments — it understands them."*
 
@@ -223,7 +225,7 @@ Maps to the three judge questions: *what & why · what's distinctive · what's n
 
 **Close (≈40s).** Assume-breach design, PSR reimbursement angle, what we'd build next.
 
-> **Headline line:** *"Two payments. Same amount. Same new payee. A rules engine sees one transaction twice. Vault sees a customer buying a car — and a customer being robbed."*
+> **Headline line:** *"Two payments. Same amount. Same new payee. A rules engine sees one transaction twice. Fortress sees a customer buying a car — and a customer being robbed."*
 
 ### Demo reliability
 - Saved payees pre-seeded so Beat 1 is one click.
@@ -250,7 +252,7 @@ Maps to the three judge questions: *what & why · what's distinctive · what's n
 **Locked**
 - Stack: Node + Express + Vite/React, in-memory data.
 - AI engine: real Claude API + scripted fallback.
-- Concept: Vault — security as the product, APP fraud at point of payment.
+- Concept: Fortress — security as the product, APP fraud at point of payment.
 
 **Open — need from the team**
 - `ANTHROPIC_API_KEY` (server-side `.env`) for the live Claude path.

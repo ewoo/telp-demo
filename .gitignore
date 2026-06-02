@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Node / Fortress app
+node_modules/
+client/node_modules/
+client/dist/
+server/.env
+npm-debug.log*
