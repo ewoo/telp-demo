@@ -3,33 +3,27 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-<title>Vault</title>
+<title>Fortress</title>
 <!-- Add to Home Screen → launches fullscreen like a native app -->
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Vault" />
-<meta name="theme-color" content="#0a5c4f" />
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%230a5c4f'/%3E%3Ctext x='50%25' y='54%25' font-family='-apple-system,Helvetica' font-size='104' font-weight='800' fill='%2312a589' text-anchor='middle' dominant-baseline='middle'%3EV%3C/text%3E%3C/svg%3E" />
+<meta name="apple-mobile-web-app-title" content="Fortress" />
+<meta name="theme-color" content="#16243f" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Crect width='180' height='180' rx='40' fill='%2316243f'/%3E%3Ctext x='50%25' y='54%25' font-family='-apple-system,Helvetica' font-size='104' font-weight='800' fill='%2312a589' text-anchor='middle' dominant-baseline='middle'%3EF%3C/text%3E%3C/svg%3E" />
 <style>
   :root{
     --ink:#0b1220; --muted:#6b7280; --line:#e9ebf1; --bg:#f4f5f8;
-    --brand:#0a5c4f; --brand2:#12a589; --accent:#1d4ed8;
+    --brand:#16243f; --brand2:#12a589; --accent:#1d4ed8;
     --amber:#b45309; --amberbg:#fff7ed; --greenbg:#ecfdf5; --red:#b91c1c; --redbg:#fef2f2;
     font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
   }
   *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
-  body{margin:0;background:radial-gradient(1100px 700px at 50% -10%,#16203a,#0a0e1a);color:#e8eaf0;
+  body{margin:0;background:radial-gradient(1100px 700px at 50% -10%,#1c2c4d,#0a0e1a);color:#e8eaf0;
     min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 16px 64px;}
   .head{text-align:center;margin-bottom:22px}
   .head h1{margin:0 0 4px;font-size:24px;letter-spacing:-.3px}
   .head p{margin:0;color:#9aa3b8;font-size:13px;max-width:560px}
-  .head .beats{margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-  .chip{background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:999px;
-    padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
-  .chip:hover{background:#243152}
-  .chip.scam{border-color:#5b2330;color:#ffd2d2}
-  .chip.scam:hover{background:#3a1c25}
 
   /* phone */
   .phone{width:340px;height:724px;background:#000;border-radius:48px;padding:11px;
@@ -41,17 +35,21 @@
     background:#000;border-radius:0 0 18px 18px;z-index:30}
   .status{height:50px;display:flex;align-items:flex-end;justify-content:space-between;
     padding:0 26px 8px;font-size:14px;font-weight:600;flex:0 0 auto;background:#fff}
-  .brandbar{background:var(--brand);color:#fff;padding:12px 20px 14px;display:flex;align-items:center;gap:10px;flex:0 0 auto}
-  .brandbar .logo{width:26px;height:26px;border-radius:7px;background:var(--brand2);display:grid;place-items:center;
-    font-weight:800;font-size:14px;color:#042b25}
+  .brandbar{background:var(--brand);color:#fff;padding:12px 18px 12px;display:flex;align-items:center;gap:10px;flex:0 0 auto}
+  .brandbar .logo{width:28px;height:28px;border-radius:8px;background:var(--brand2);display:grid;place-items:center;
+    font-weight:800;font-size:15px;color:#04231d}
   .brandbar b{font-size:15px}
-  .brandbar .sub{margin-left:auto;opacity:.85;font-size:11px}
-  .nav{padding:8px 18px 6px;display:flex;align-items:center;gap:8px;flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line)}
-  .nav .back{color:var(--brand);font-size:24px;line-height:1;cursor:pointer;width:24px}
-  .nav h2{font-size:16px;margin:0;font-weight:700}
+  .brandbar .stat{margin-left:auto;display:flex;align-items:center;gap:6px;font-size:10.5px;opacity:.9}
+  .dot{width:7px;height:7px;border-radius:50%;background:#f0b429;box-shadow:0 0 0 3px rgba(240,180,41,.2)}
+  .nav{padding:8px 16px 6px;display:flex;align-items:center;gap:8px;flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line)}
+  .nav .back{color:var(--brand2);font-size:15px;font-weight:600;cursor:pointer;background:none;border:none;padding:0}
   .body{padding:16px 16px 22px;overflow-y:auto;flex:1 1 auto}
   .body::-webkit-scrollbar{display:none}
   .home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:124px;height:5px;background:#00000026;border-radius:999px;z-index:30}
+
+  .greeting{font-size:20px;font-weight:800;margin:2px 0 2px}
+  .sub{color:var(--muted);font-size:12.5px;margin:0 0 12px}
+  .section{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:6px 2px 8px}
 
   .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
   .acct{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
@@ -59,93 +57,107 @@
   .acct .nm{font-weight:700;font-size:15px}
   .acct .ms{color:var(--muted);font-size:12px;margin-top:2px}
   .acct .bal{font-weight:800;font-size:16px}
-  .label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
-  .field{background:#f1f3f7;border-radius:12px;padding:11px 13px;margin-top:6px;font-size:15px;font-weight:600;width:100%;border:1px solid transparent}
-  .field:focus{outline:none;border-color:var(--brand2);background:#fff}
-  select.field{appearance:none}
-  .mt{margin-top:12px}
-  .row{display:flex;justify-content:space-between;align-items:center}
-  .btn{background:var(--brand);color:#fff;border:none;border-radius:14px;padding:15px;width:100%;font-size:16px;font-weight:700;cursor:pointer}
-  .btn:active{transform:translateY(1px)}
-  .btn.sec{background:#eef1f6;color:var(--brand)}
-  .btn.danger{background:var(--red)}
-  .btn:disabled{opacity:.4}
+
+  .hero{background:var(--brand);color:#fff;border:none}
+  .hero .label{font-size:11px;color:#aeb9d0;text-transform:uppercase;letter-spacing:.4px}
+  .hero .amount{font-size:30px;font-weight:800;margin:4px 0 2px}
+  .hero .num{font-size:12px;opacity:.8}
 
   .txn{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
   .txn:last-child{border-bottom:none}
   .txn .d{color:var(--muted);font-size:11.5px;margin-top:2px}
-  .pos{color:var(--brand)}
+  .txn .amt{font-weight:700}
+  .credit{color:var(--brand2)}
 
-  .banner{border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
-  .banner.good{background:var(--greenbg);color:#065f46;border:1px solid #b8efdf}
-  .banner.warn{background:var(--amberbg);color:#7c2d12;border:1px solid #fed7aa}
-  .banner.bad{background:var(--redbg);color:#7f1d1d;border:1px solid #fecaca}
-  .pill{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px}
-  .pill.green{background:var(--greenbg);color:var(--brand)}
-  .pill.amber{background:var(--amberbg);color:var(--amber)}
-  .pill.red{background:var(--redbg);color:var(--red)}
+  label{display:block;font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin:0 0 5px}
+  .field{margin-bottom:12px}
+  select,input{width:100%;background:#f1f3f7;border:1px solid transparent;border-radius:12px;padding:12px 13px;
+    font-size:15px;font-weight:600;color:var(--ink);font-family:inherit}
+  select:focus,input:focus{outline:none;border-color:var(--brand2);background:#fff}
+  .demo-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin:2px 2px 7px}
+  .presets{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+  .preset{background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:10px 12px;font-size:12.5px;
+    font-weight:600;text-align:left;cursor:pointer;color:var(--ink)}
+  .preset:hover{border-color:var(--brand2)}
+  .preset.scam{border-color:#f0c9c9}
 
-  /* chat */
-  .msgs{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
-  .msg{max-width:84%;padding:11px 13px;border-radius:16px;font-size:13.5px;line-height:1.45}
-  .msg.ai{background:#fff;border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
-  .msg.me{background:var(--brand);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
-  .msg .who{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;opacity:.6;margin-bottom:3px}
-  .typing{display:flex;gap:4px;padding:6px 2px}
-  .typing i{width:7px;height:7px;border-radius:50%;background:#bcc3d4;animation:b 1s infinite}
-  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
-  @keyframes b{0%,60%,100%{opacity:.3}30%{opacity:1}}
-  .answers{display:flex;flex-direction:column;gap:8px}
-  .ans{background:#fff;border:1.5px solid var(--brand);color:var(--brand);border-radius:12px;padding:11px 13px;font-size:13px;font-weight:600;cursor:pointer;text-align:left}
-  .ans:hover{background:var(--greenbg)}
-  .ans.scam{border-color:var(--red);color:#7f1d1d}
-  .ans.scam:hover{background:var(--redbg)}
+  .btn{background:var(--brand);color:#fff;border:none;border-radius:14px;padding:15px;width:100%;font-size:16px;font-weight:700;cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+  .btn.sec{background:#eef1f6;color:var(--brand)}
+  .btn.danger{background:var(--red)}
+  .btn:disabled{opacity:.5}
+  .btnrow{display:flex;gap:10px}
+  .btnrow .btn{flex:1}
+  .err{background:var(--redbg);color:#7f1d1d;border:1px solid #fecaca;border-radius:10px;padding:9px 11px;font-size:12.5px;margin-bottom:10px}
 
-  .verdict{text-align:center;padding:26px 16px;border-radius:18px}
-  .verdict.held{background:linear-gradient(180deg,#fef2f2,#fff);border:1px solid #fecaca}
-  .verdict.ok{background:linear-gradient(180deg,#ecfdf5,#fff);border:1px solid #b8efdf}
-  .verdict .ico{width:66px;height:66px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:32px;color:#fff}
-  .verdict.held .ico{background:var(--red)}.verdict.ok .ico{background:var(--brand2)}
-  .verdict h3{margin:0 0 6px;font-size:21px}
-  .verdict p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+  .sentinel-head{display:flex;align-items:center;margin-bottom:10px}
+  .badge{display:inline-flex;align-items:center;gap:6px;background:#eaf3ff;color:#1e40af;border-radius:999px;
+    padding:6px 12px;font-size:12px;font-weight:700}
+  .badge.ok{background:var(--greenbg);color:var(--brand2)}
+  .review-banner{background:var(--amberbg);color:#7c2d12;border:1px solid #fed7aa;border-radius:12px;
+    padding:11px 13px;font-size:12.5px;line-height:1.45;margin-bottom:12px}
 
-  .audit{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
-  .audit .ln{display:flex;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line)}
-  .audit .ts{color:var(--muted);flex:0 0 54px}
-  .tag{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:5px;background:#eef1f6;color:var(--accent)}
-  .tag.hold{background:var(--redbg);color:var(--red)}
-  .tag.ok{background:var(--greenbg);color:var(--brand)}
-  .chainok{font-size:11px;color:var(--brand);font-weight:700;margin-top:8px}
+  .chat{display:flex;flex-direction:column;gap:9px;margin-bottom:12px}
+  .bubble{max-width:86%;padding:11px 13px;border-radius:16px;font-size:13.5px;line-height:1.45}
+  .bubble.sentinel{background:#fff;border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
+  .bubble.customer{background:var(--brand);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+  .bubble.thinking{color:var(--muted);font-style:italic;align-self:flex-start}
+  .spin{display:inline-block;width:11px;height:11px;border:2px solid #cbd2e0;border-top-color:var(--brand2);
+    border-radius:50%;animation:sp .7s linear infinite;vertical-align:-1px;margin-right:5px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .answer-row{display:flex;gap:8px;margin-bottom:8px}
+  .answer-row input{flex:1}
+  .answer-row .btn{width:auto;padding:12px 16px}
+  .hints{display:flex;flex-direction:column;gap:6px}
+  .hint{background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12px;
+    color:var(--ink);text-align:left;cursor:pointer;line-height:1.35}
+  .hint:hover{border-color:var(--brand2);background:var(--greenbg)}
+
+  .outcome{text-align:center;padding:22px 14px;border-radius:18px;margin-bottom:12px}
+  .outcome.success{background:linear-gradient(180deg,#ecfdf5,#fff);border:1px solid #b8efdf}
+  .outcome.held{background:linear-gradient(180deg,#fef2f2,#fff);border:1px solid #fecaca}
+  .outcome .icon{width:64px;height:64px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:30px;color:#fff}
+  .outcome.success .icon{background:var(--brand2)}.outcome.held .icon{background:var(--red)}
+  .outcome h2{margin:0 0 6px;font-size:20px}
+  .outcome p{margin:0;color:#374151;font-size:13px;line-height:1.5}
+  .signals{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 4px}
+  .signal-tag{background:#fff1f1;color:#9f1239;border:1px solid #fbd0d0;border-radius:8px;padding:4px 9px;font-size:10.5px;font-weight:700}
+  .held-note{background:var(--greenbg);color:#065f46;border:1px solid #b8efdf;border-radius:12px;
+    padding:11px 13px;font-size:12px;line-height:1.45;margin:12px 0 4px;text-align:left}
+
+  .verify{border-radius:12px;padding:10px 13px;font-size:12.5px;font-weight:700;margin-bottom:12px}
+  .verify.ok{background:var(--greenbg);color:var(--brand2);border:1px solid #b8efdf}
+  .audit-entry{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:8px}
+  .audit-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .audit-event{font-weight:800;font-size:12.5px;color:var(--brand)}
+  .audit-seq{font-size:10.5px;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
+  .audit-detail{font-size:11.5px;color:#374151;margin:4px 0 5px;line-height:1.4}
+  .audit-hash{font-family:ui-monospace,Menlo,monospace;font-size:10px;color:#9aa3b8}
+  .empty{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px}
 
   .tabbar{flex:0 0 auto;height:56px;border-top:1px solid var(--line);background:#fff;display:flex;justify-content:space-around;align-items:center;padding-bottom:4px}
-  .tab{font-size:10px;color:var(--muted);text-align:center;cursor:pointer}
+  .tab{font-size:10px;color:var(--muted);text-align:center;cursor:pointer;background:none;border:none}
   .tab.active{color:var(--brand);font-weight:700}
   .tab .gi{font-size:18px;display:block}
   .resetbtn{position:fixed;top:18px;right:18px;background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;z-index:50}
-  h3.sec{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:4px 2px 8px}
-  .note{font-size:11px;color:#9aa3b8;margin-top:14px;text-align:center}
+  .note{font-size:11px;color:#9aa3b8;margin-top:14px;text-align:center;max-width:520px}
 
-  /* On-device demo control — hidden on desktop, shown on phone/standalone */
+  /* On-device demo control — phone / standalone only */
   #democtl{display:none;position:fixed;z-index:60;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));
     flex-direction:column;align-items:flex-end;gap:8px}
-  #demomenu{display:none;flex-direction:column;gap:8px;background:#11182b;border:1px solid #2c3a63;
-    border-radius:14px;padding:10px}
+  #demomenu{display:none;flex-direction:column;gap:8px;background:#11182b;border:1px solid #2c3a63;border-radius:14px;padding:10px}
   #demomenu.open{display:flex}
-  #demomenu button{background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:10px;
-    padding:11px 14px;font-size:13px;font-weight:600;text-align:left}
-  #demomenu button.scam{border-color:#5b2330;color:#ffd2d2}
-  #demofab{width:54px;height:54px;border-radius:50%;background:#0a5c4f;color:#fff;border:2px solid #12a589;
-    font-size:11px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+  #demomenu button{background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:600;text-align:left}
+  #demofab{width:54px;height:54px;border-radius:50%;background:var(--brand);color:#fff;border:2px solid var(--brand2);font-size:11px;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.45)}
 
-  /* FULLSCREEN APP MODE — real iPhone (standalone) or narrow screens */
   @media (display-mode:standalone), (max-width:480px){
     body{padding:0;background:#000;justify-content:flex-start}
     .head,.note,.resetbtn{display:none}
     .phone{width:100vw;height:100vh;height:100dvh;border-radius:0;padding:0;box-shadow:none}
     .phone .screen{border-radius:0}
-    .phone .notch,.phone .home{display:none}      /* real iPhone provides these */
-    .phone .status{display:none}                   /* use the real status bar */
-    .brandbar{padding-top:calc(14px + env(safe-area-inset-top))}
+    .phone .notch,.phone .home{display:none}
+    .phone .status{display:none}
+    .brandbar{padding-top:calc(12px + env(safe-area-inset-top))}
     .nav{padding-top:calc(8px + env(safe-area-inset-top))}
     .tabbar{padding-bottom:calc(6px + env(safe-area-inset-bottom))}
     #democtl{display:flex}
@@ -153,15 +165,10 @@
 </style>
 </head>
 <body>
-  <button class="resetbtn" onclick="reset()">↺ Reset demo</button>
+  <button class="resetbtn" onclick="resetDemo()">↺ Reset demo</button>
   <div class="head">
-    <h1>Vault — security as the product</h1>
-    <p>Two payments. Same amount. Same new payee. A rules engine sees one transaction twice. Vault sees a customer buying a car — and a customer being robbed.</p>
-    <div class="beats">
-      <span class="chip" onclick="startBeat('routine')">▶ Beat 1 · Routine payment</span>
-      <span class="chip" onclick="startBeat('honest')">▶ Beat 2 · Large but honest</span>
-      <span class="chip scam" onclick="startBeat('scam')">▶ Beat 3 · The scam</span>
-    </div>
+    <h1>Fortress · Sentinel demo</h1>
+    <p>Two payments. Same amount. Same new payee. A rules engine sees one transaction twice. Fortress sees a customer buying a car — and a customer being robbed.</p>
   </div>
 
   <div class="phone"><div class="screen">
@@ -170,292 +177,335 @@
     <div id="app"></div>
     <div class="home"></div>
   </div></div>
-  <div class="note">Prototype · scripted AI responses · no backend. Use the answer chips in Beat 2 / Beat 3 so every run is identical.</div>
+  <div class="note">Prototype · Sentinel runs a scripted fallback (no backend) so every run is identical. In <b>Make a payment</b>, tap a demo scenario to fill the form; in the interview, tap a suggested answer then Send.</div>
 
-  <!-- On-device demo control (phone / Add-to-Home-Screen only) -->
   <div id="democtl">
     <div id="demomenu">
-      <button onclick="pickBeat('routine')">▶ Beat 1 · Routine</button>
-      <button onclick="pickBeat('honest')">▶ Beat 2 · Large but honest</button>
-      <button class="scam" onclick="pickBeat('scam')">▶ Beat 3 · The scam</button>
-      <button onclick="pickBeat('reset')">↺ Reset</button>
+      <button onclick="go('pay')">💸 Make a payment</button>
+      <button onclick="go('audit')">🛡️ Audit trail</button>
+      <button onclick="resetDemo()">↺ Reset</button>
     </div>
-    <button id="demofab" onclick="toggleDemoMenu()">DEMO</button>
+    <button id="demofab" onclick="document.getElementById('demomenu').classList.toggle('open')">DEMO</button>
   </div>
 
 <script>
-// ---------------------------------------------------------------------------
-// Vault interactive prototype — all state in memory, scripted AI.
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// Fortress / Sentinel — interactive prototype. Mirrors the amit-branch flow:
+// rules.assess → Sentinel interview → confirm → success/held, hash-chained audit.
+// All in-memory, scripted Sentinel (no backend) for a reliable live demo.
+// ===========================================================================
 const fmt = p => '£' + (p/100).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
 
 const SEED = () => ({
+  customer:{ name:'Alex Morgan', tier:'Fortress Premier' },
   accounts:[
     {id:'cur',name:'Current Account',mask:'••••3491',sort:'04-00-72',bal:1482055},
     {id:'sav',name:'Savings',mask:'••••8806',sort:'04-00-72',bal:4210000},
     {id:'joint',name:'Joint Account',mask:'••••1175',sort:'04-00-72',bal:326510},
   ],
   payees:[
-    {id:'ll',name:'The Landlord (Jane Foster)',mask:'••••5520',trusted:true,times:14},
-    {id:'water',name:'Thames Water',mask:'••••9043',trusted:true,times:8},
-    {id:'gas',name:'British Gas',mask:'••••2210',trusted:true,times:11},
+    {id:'ll',name:'The Landlord (Jane Foster)',mask:'••••5520',trusted:true},
+    {id:'water',name:'Thames Water',mask:'••••9043',trusted:true},
+    {id:'gas',name:'British Gas',mask:'••••2210',trusted:true},
   ],
-  txns:[
-    {desc:'The Landlord — Rent',date:'May 1',amt:-120000},
-    {desc:'ACME Corp — Salary',date:'May 28',amt:340000},
-    {desc:'Tesco',date:'May 27',amt:-6420},
-    {desc:'Thames Water',date:'May 20',amt:-4200},
-    {desc:'British Gas',date:'May 18',amt:-8999},
-    {desc:'Spotify',date:'May 15',amt:-1299},
-    {desc:'From Joint Account',date:'May 12',amt:5000},
-    {desc:'The Landlord — Rent',date:'Apr 1',amt:-120000},
-  ],
-  audit:[{ts:'09:40:00',ev:'Session opened · genesis hash 0x00a1',tag:'INIT',cls:''}],
+  txns:{
+    cur:[
+      {desc:'ACME Corp — Salary',date:'May 28',amt:340000},
+      {desc:'Tesco',date:'May 27',amt:-6420},
+      {desc:'Thames Water',date:'May 20',amt:-4200},
+      {desc:'British Gas',date:'May 18',amt:-8999},
+      {desc:'Spotify',date:'May 15',amt:-1299},
+      {desc:'From Joint Account',date:'May 12',amt:5000},
+      {desc:'The Landlord — Rent',date:'May 1',amt:-120000},
+      {desc:'The Landlord — Rent',date:'Apr 1',amt:-120000},
+    ],
+    sav:[{desc:'Standing order — from Current',date:'May 28',amt:50000},{desc:'Standing order — from Current',date:'Apr 28',amt:50000}],
+    joint:[{desc:'To Current Account',date:'May 12',amt:-5000},{desc:'Ocado',date:'May 3',amt:-8410}],
+  },
+  config:{ newPayeeReviewAbove:100000, typologyCues:['safe account','fraud team','fraud department','crypto','bitcoin','investment','guaranteed return','romance','invoice changed','bank details changed','hmrc','police','arrest','urgent','do not tell','keep this between us'] },
+  audit:[], seq:0,
 });
+let S, pay; // pay = in-flight payment
 
-let S, view, pay; // pay = in-progress payment context
-function reset(){ S = SEED(); view = {name:'dashboard'}; pay = null; render(); }
+// ---- tiny non-crypto hash for a visible, verifiable-looking chain ----
+function hash(s){ let h=0x811c9dc5; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=(h*0x01000193)>>>0; } return ('0000000'+h.toString(16)).slice(-8).repeat(4); }
+function record(event, detail){
+  const prev = S.audit.length ? S.audit[S.audit.length-1].hash : '00'.repeat(16);
+  const seq = S.seq++;
+  const h = hash(prev + event + JSON.stringify(detail) + seq);
+  S.audit.push({ seq, event, detail, hash:h, prevHash:prev });
+}
+function verify(){ // chain integrity
+  let prev='00'.repeat(16);
+  for(const e of S.audit){ if(e.prevHash!==prev) return {valid:false, brokenAt:e.seq}; prev=e.hash; }
+  return {valid:true};
+}
 
-// ---- AI interview scripts (scripted for demo reliability) ----
-const INTERVIEWS = {
-  honest:{
-    payee:'JD Motors', amt:800000,
-    turns:[
-      {ai:"This is the first time you've paid JD Motors, and it's a large amount. To keep you safe — what's this payment for?",
-       answers:[{t:"Buying a used car from a dealer I found myself",scam:false}]},
-      {ai:"Good. Did anyone contact you and tell you to make this payment, or help you set it up?",
-       answers:[{t:"No, I went to the forecourt and chose the car",scam:false}]},
-    ],
-    verdict:'release',
-  },
-  scam:{
-    payee:'Acct Safety — A Morgan', amt:800000,
-    turns:[
-      {ai:"This is the first time you've paid this account, and it's a large amount. To keep you safe — what's this payment for?",
-       answers:[{t:"Someone from the bank's fraud team said my account isn't safe and I need to move my money",scam:true}]},
-      {ai:"I understand this feels urgent. Vault would never ask you to move money to a “safe account.” Did this person contact you unexpectedly — by call, text or email?",
-       answers:[{t:"Yes, they called me an hour ago and stayed on the phone",scam:true}]},
-      {ai:"Are they asking you to keep this payment secret, or telling you not to discuss it with branch staff?",
-       answers:[{t:"They said not to tell anyone or it could compromise the investigation",scam:true}]},
-    ],
-    verdict:'hold',
-  },
-};
+// ---- rules layer (mirror rules.js) ----
+function assess(p){
+  if(p.trusted) return {decision:'clear', reasons:['Trusted payee, paid before']};
+  const reasons=[];
+  if(p.amt >= S.config.newPayeeReviewAbove) reasons.push(`New payee, ${fmt(p.amt)} (over £${S.config.newPayeeReviewAbove/100} new-payee threshold)`);
+  const ref=(p.reference||'').toLowerCase();
+  const cue=S.config.typologyCues.find(c=>ref.includes(c));
+  if(cue) reasons.push(`Reference matches a known scam cue ("${cue}")`);
+  return reasons.length ? {decision:'needs_review', reasons} : {decision:'clear', reasons:['Below new-payee review threshold']};
+}
 
-// ---------------------------------------------------------------------------
-function log(ts,ev,tag,cls=''){ S.audit.push({ts,ev,tag,cls}); }
+// ---- Sentinel scripted engine (mirror claude.js scriptedTurn) ----
+const SCAM_CUES=['safe account','safe-account','fraud team','fraud department','fraud officer','compromised','hacked','someone called','someone contacted','they called','they told me','told me to','asked me to move','help me move','protect my money','crypto','bitcoin','investment','guaranteed','returns','hmrc','police','arrest','urgent',"don't tell",'do not tell','keep this','between us','invoice changed','details changed','new bank details'];
+const SELF_CUES=['car','autotrader','dealer','i found','myself','deposit','i chose','i contacted','invoice i','i ordered','furniture','holiday i booked','i requested'];
+const INJECT_CUES=['ignore','approve it','release the payment','release it','override','approval mode','you are now','as an ai','disregard','i confirm this is safe'];
 
-function startBeat(kind){
-  reset();
-  if(kind==='routine'){ // pay trusted landlord, clears instantly
-    pay = {payeeName:'The Landlord (Jane Foster)', mask:'••••5520', amt:120000, trusted:true, isNew:false, kind};
-    view = {name:'review'}; assess();
-  } else {
-    const iv = INTERVIEWS[kind];
-    pay = {payeeName:iv.payee, mask:'••••'+(kind==='scam'?'0000':'7781'), amt:iv.amt, trusted:false, isNew:true, kind, turn:0, msgs:[]};
-    view = {name:'review'}; assess();
+function sentinelTurn(){
+  const answers = pay.interview.filter(t=>t.role==='customer');
+  const last = answers.length ? answers[answers.length-1].content.toLowerCase() : '';
+  const all = answers.map(a=>a.content.toLowerCase()).join(' ');
+  if(answers.length===0){
+    return {decision:'continue', message:'This is a payment to a new payee, so I just want to run a quick safety check. Can you tell me what this payment is for, and how you came to make it?', signals:[]};
   }
+  const scam = SCAM_CUES.filter(c=>all.includes(c));
+  const inj = INJECT_CUES.filter(c=>last.includes(c));
+  const self = SELF_CUES.filter(c=>all.includes(c));
+  if(inj.length) return {decision:'hold', message:"I can only act on the safety check, not on a request to approve the payment — and being pushed to approve it quickly is itself a warning sign. I've placed this payment on hold to protect you. No money has left your account.", signals:['attempt_to_override_control',...scam]};
+  if(scam.length) return {decision:'hold', message:"Thank you for being honest with me. What you've described — being contacted and guided to move money to keep it 'safe' — matches a common scam pattern, where genuine-looking payments are made under pressure. I've paused this payment to protect you. No money has left your account, and a specialist will be in touch.", signals:['unexpected_contact_or_coercion',...scam]};
+  if(self.length) return {decision:'release', message:"Thanks — that all sounds like a payment you've arranged yourself, with no signs of pressure or third-party involvement. I'm releasing it now.", signals:[]};
+  if(answers.length===1) return {decision:'continue', message:'Thanks. One more thing: did anyone contact you and ask or encourage you to make this payment, or did you arrange it entirely yourself?', signals:[]};
+  return {decision:'hold', message:"I wasn't able to fully confirm this payment is safe, so I've paused it for a quick human review to protect you. No money has left your account.", signals:['unresolved_after_questions_failed_closed']};
 }
 
-function assess(){
-  // RULES LAYER — no hidden isScam flag; new payee + amount drives review.
-  log('09:41:01', `Assess payment ${fmt(pay.amt)} → ${pay.payeeName}`,'ASSESS');
-  if(pay.trusted){
-    pay.decision='clear'; pay.reason='Trusted payee, established pattern';
-    log('09:41:01','Rules: trusted payee → CLEAR','RULES','ok');
-  } else {
-    pay.decision='needs_review'; pay.reason='New payee over £1,000';
-    log('09:41:01','Rules: new payee + amount → NEEDS REVIEW','RULES');
-  }
-  render();
-}
+// ===========================================================================
+// Routing / render
+// ===========================================================================
+let view={name:'dashboard'};
+function resetDemo(){ S=SEED(); record('system.genesis',{note:'Fortress audit trail initialised'}); pay=null; view={name:'dashboard'}; document.getElementById('demomenu')?.classList.remove('open'); render(); }
+function go(name,arg){ document.getElementById('demomenu')?.classList.remove('open'); view={name,arg}; render(); }
+const el=()=>document.getElementById('app');
+function esc(s){ return (s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
-function beginInterview(){
-  view={name:'interview'};
-  log('09:41:03','AI second pair of eyes engaged','AI');
-  render();
-}
-function pushAi(text){ pay.msgs.push({who:'ai',text}); }
-function answer(turnIdx, ansIdx){
-  const iv = INTERVIEWS[pay.kind];
-  const a = iv.turns[turnIdx].answers[ansIdx];
-  pay.msgs.push({who:'me',text:a.t});
-  log('09:41:0'+(4+turnIdx), 'Customer answer recorded','AI', a.scam?'':'ok');
-  pay.turn++;
-  render();
-  // next AI turn or verdict
-  setTimeout(()=>{
-    if(pay.turn < iv.turns.length){
-      pay.typing=true; render();
-      setTimeout(()=>{ pay.typing=false; pushAi(iv.turns[pay.turn].ai); render(); }, 900);
-    } else {
-      pay.typing=true; render();
-      setTimeout(()=>{ pay.typing=false; resolve(iv.verdict); }, 1000);
-    }
-  }, 350);
-}
-function resolve(v){
-  if(v==='release'){
-    log('09:41:08','No coercion fingerprint → RELEASE','AI','ok');
-    commit();
-  } else {
-    log('09:41:09','Safe-account typology detected → HOLD','AI','hold');
-    log('09:41:09','Payment held · money never left account','HOLD','hold');
-    view={name:'held'}; render();
-  }
-}
-function commit(){
-  const acc = S.accounts.find(a=>a.id==='cur');
-  acc.bal -= pay.amt;
-  S.txns.unshift({desc:pay.payeeName, date:'Today', amt:-pay.amt});
-  log('09:41:09', `Committed ${fmt(pay.amt)} → ${pay.payeeName}`,'COMMIT','ok');
-  view={name:'success'}; render();
-}
-
-// ---------------------------------------------------------------------------
-// RENDER
-// ---------------------------------------------------------------------------
-const el = () => document.getElementById('app');
+function brand(){ return `<div class="brandbar"><span class="logo">F</span><b>Fortress</b>
+  <span class="stat"><span class="dot"></span>Sentinel · scripted</span></div>`; }
 function tabbar(active){
-  const t=(k,g,l)=>`<div class="tab ${active===k?'active':''}" onclick="${k==='audit'?"view={name:'audit'};render()":k==='home'?'reset()':''}"><span class="gi">${g}</span>${l}</div>`;
-  return `<div class="tabbar">${t('home','🏠','Accounts')}${t('pay','💸','Pay')}${t('audit','🛡️','Audit')}${t('home2','⚙️','More')}</div>`;
+  const t=(k,g,l,fn)=>`<button class="tab ${active===k?'active':''}" onclick="${fn}"><span class="gi">${g}</span>${l}</button>`;
+  return `<div class="tabbar">
+    ${t('dash','🏠','Accounts',"go('dashboard')")}
+    ${t('pay','💸','Pay',"go('pay')")}
+    ${t('audit','🛡️','Audit',"go('audit')")}
+    ${t('more','⚙️','More','resetDemo()')}
+  </div>`;
 }
-function brand(sub){return `<div class="brandbar"><span class="logo">V</span><b>Vault</b><span class="sub">${sub||''}</span></div>`;}
 
 function render(){
+  const v=view.name;
   let h='';
-  if(view.name==='dashboard') h=dashboard();
-  else if(view.name==='account') h=account();
-  else if(view.name==='review') h=review();
-  else if(view.name==='interview') h=interview();
-  else if(view.name==='held') h=held();
-  else if(view.name==='success') h=success();
-  else if(view.name==='audit') h=audit();
+  if(v==='dashboard') h=dashboard();
+  else if(v==='account') h=account(view.arg);
+  else if(v==='pay') h=payForm();
+  else if(v==='interview') h=interview();
+  else if(v==='confirm') h=confirm();
+  else if(v==='success') h=success();
+  else if(v==='held') h=held();
+  else if(v==='audit') h=audit();
   el().innerHTML=h;
-  const b=el().querySelector('.body'); if(b) b.scrollTop=b.scrollHeight*(view.name==='interview'?1:0);
+  if(view.afterRender){ const f=view.afterRender; view.afterRender=null; f(); }
+  const b=el().querySelector('.body'); if(b && view.scrollBottom){ b.scrollTop=b.scrollHeight; view.scrollBottom=false; }
 }
 
 function dashboard(){
   const total=S.accounts.reduce((s,a)=>s+a.bal,0);
-  return brand('Alex Morgan')+`
-  <div class="body">
-    <div class="card" style="background:var(--brand);color:#fff;border:none">
-      <div class="label" style="color:#bfe9df">Total balance</div>
-      <div style="font-size:30px;font-weight:800;margin-top:4px">${fmt(total)}</div>
-      <div style="font-size:12px;opacity:.85;margin-top:2px">Vault Premier · protected</div>
-    </div>
-    <h3 class="sec">Accounts</h3>
-    ${S.accounts.map(a=>`<div class="card acct" onclick="view={name:'account',id:'${a.id}'};render()">
+  return brand()+`<div class="body">
+    <h1 class="greeting">Good afternoon, ${S.customer.name.split(' ')[0]}</h1>
+    <p class="sub">${S.customer.tier} · Total balance ${fmt(total)}</p>
+    <h2 class="section">Your accounts</h2>
+    ${S.accounts.map(a=>`<div class="card acct" onclick="go('account','${a.id}')">
       <div><div class="nm">${a.name}</div><div class="ms">${a.mask} · ${a.sort}</div></div>
       <div class="bal">${fmt(a.bal)}</div></div>`).join('')}
-  </div>`+tabbar('home');
+    <button class="btn" style="margin-top:4px" onclick="go('pay')">Make a payment</button>
+  </div>`+tabbar('dash');
 }
 
-function account(){
-  const a=S.accounts.find(x=>x.id===view.id);
-  const tx=S.txns;
-  return brand('')+`
-  <div class="nav"><span class="back" onclick="view={name:'dashboard'};render()">‹</span><h2>${a.name}</h2></div>
+function account(id){
+  const a=S.accounts.find(x=>x.id===id); const tx=S.txns[id]||[];
+  return brand()+`<div class="nav"><button class="back" onclick="go('dashboard')">← All accounts</button></div>
   <div class="body">
-    <div class="card" style="text-align:center">
-      <div class="label">Available balance</div>
-      <div style="font-size:30px;font-weight:800;margin:4px 0">${fmt(a.bal)}</div>
-      <div class="ms" style="color:var(--muted);font-size:12px">${a.mask} · ${a.sort}</div>
-      <button class="btn mt" onclick="openPay()">Make a payment</button>
-    </div>
-    <h3 class="sec">Recent transactions</h3>
+    <div class="card hero"><div class="label">${a.name} · ${a.mask}</div>
+      <div class="amount">${fmt(a.bal)}</div><div class="num">Sort code ${a.sort}</div></div>
+    <h2 class="section">Recent transactions</h2>
     <div class="card">${tx.map(t=>`<div class="txn"><div><div>${t.desc}</div><div class="d">${t.date}</div></div>
-      <div class="${t.amt>0?'pos':''}" style="font-weight:700">${t.amt>0?'+':''}${fmt(Math.abs(t.amt))}</div></div>`).join('')}</div>
-  </div>`+tabbar('home');
+      <div class="amt ${t.amt>0?'credit':''}">${t.amt>0?'+':''}${fmt(Math.abs(t.amt))}</div></div>`).join('')}</div>
+    <button class="btn" onclick="go('pay','${id}')">Make a payment from this account</button>
+  </div>`+tabbar('dash');
 }
-function openPay(){ alert('In the live build this opens the payment form.\\nFor the demo, use the Beat chips above the phone to run a scripted payment.'); }
 
-function review(){
-  const clear = pay.decision==='clear';
-  return brand('Payment')+`
-  <div class="nav"><span class="back" onclick="view={name:'dashboard'};render()">‹</span><h2>Review payment</h2></div>
+const PRESETS=[
+  {label:'Beat 1 · Routine — Landlord £1,200', cls:'', cfg:{payee:'ll', amount:'1200', reference:'Rent'}},
+  {label:'Beat 2 · New payee £8,000 (car)', cls:'', cfg:{payee:'__new__', name:'JD Motors', acct:'8842 0091', amount:'8000', reference:'Car purchase'}},
+  {label:'Beat 3 · New payee £8,000 (scam)', cls:'scam', cfg:{payee:'__new__', name:'Acct Safety - A Morgan', acct:'6610 2255', amount:'8000', reference:''}},
+];
+
+function payForm(arg){
+  view.afterRender=()=>{
+    const sel=document.getElementById('payee'), nf=document.getElementById('newPayee');
+    const sync=()=>{ nf.style.display = sel.value==='__new__' ? 'block':'none'; };
+    sel.addEventListener('change',sync); sync();
+    if(view.arg) document.getElementById('source').value=view.arg;
+  };
+  return brand()+`<div class="nav"><button class="back" onclick="go('dashboard')">← Cancel</button></div>
   <div class="body">
-    <div class="card">
-      <div class="row"><span class="label">To</span><b>${pay.payeeName}</b></div>
-      <div class="row mt"><span class="label">Account</span><span>${pay.mask}</span></div>
-      <div class="row mt"><span class="label">Amount</span><b style="font-size:18px">${fmt(pay.amt)}</b></div>
-      <div class="row mt"><span class="label">From</span><span>Current ••••3491</span></div>
+    <h1 class="greeting">Make a payment</h1>
+    <p class="sub">Every payment is checked by Sentinel before money moves.</p>
+    <div class="demo-label">Demo scenarios — one tap to fill</div>
+    <div class="presets">
+      ${PRESETS.map((p,i)=>`<button class="preset ${p.cls}" onclick="fillPreset(${i})">${p.label}</button>`).join('')}
     </div>
-    ${clear ? `
-      <div class="banner good"><span>✓</span><span><b>Cleared instantly.</b> ${pay.reason}. Vault is invisible when it's safe.</span></div>
-      <button class="btn" onclick="commit()">Confirm payment</button>
-    ` : `
-      <div class="banner warn"><span>🔎</span><span><b>Quick safety check.</b> ${pay.reason}. We'll ask a couple of questions before this leaves your account.</span></div>
-      <button class="btn" onclick="beginInterview()">Continue</button>
-    `}
-    <p style="font-size:11px;color:var(--muted);margin-top:14px">Rules layer: <b>${pay.decision.toUpperCase()}</b> — note a scam payment and an honest one look <i>identical</i> here.</p>
+    <div class="card">
+      <div class="field"><label>From account</label>
+        <select id="source">${S.accounts.map(a=>`<option value="${a.id}">${a.name} — ${fmt(a.bal)}</option>`).join('')}</select></div>
+      <div class="field"><label>Payee</label>
+        <select id="payee">${S.payees.map(p=>`<option value="${p.id}">${p.name} · trusted</option>`).join('')}<option value="__new__">+ New payee…</option></select></div>
+      <div id="newPayee" style="display:none">
+        <div class="field"><label>Payee name</label><input id="payeeName" placeholder="e.g. JD Motors" /></div>
+        <div class="field"><label>Payee account number</label><input id="payeeAcct" placeholder="e.g. 8842 0091" /></div>
+      </div>
+      <div class="field"><label>Amount (£)</label><input id="amount" type="number" min="0" step="0.01" placeholder="0.00" /></div>
+      <div class="field"><label>Reference (optional)</label><input id="reference" placeholder="What's it for?" /></div>
+      <div id="err"></div>
+      <button class="btn" onclick="submitPayment()">Review payment</button>
+    </div>
+  </div>`+tabbar('pay');
+}
+
+function fillPreset(i){
+  const c=PRESETS[i].cfg, sel=document.getElementById('payee'), nf=document.getElementById('newPayee');
+  sel.value=c.payee; nf.style.display = c.payee==='__new__' ? 'block':'none';
+  if(c.payee==='__new__'){ document.getElementById('payeeName').value=c.name||''; document.getElementById('payeeAcct').value=c.acct||''; }
+  document.getElementById('amount').value=c.amount; document.getElementById('reference').value=c.reference||'';
+}
+
+function submitPayment(){
+  const sourceId=document.getElementById('source').value;
+  const payeeVal=document.getElementById('payee').value;
+  const amt=Math.round(parseFloat(document.getElementById('amount').value)*100);
+  const reference=document.getElementById('reference').value;
+  const err=document.getElementById('err');
+  if(!amt||amt<=0){ err.innerHTML='<div class="err">Enter a valid amount.</div>'; return; }
+  let name, trusted=false, mask;
+  if(payeeVal==='__new__'){ name=(document.getElementById('payeeName').value||'').trim();
+    if(!name){ err.innerHTML='<div class="err">Enter a payee name.</div>'; return; }
+    mask='••••'+(document.getElementById('payeeAcct').value||'0000').replace(/\D/g,'').slice(-4).padStart(4,'0');
+  } else { const p=S.payees.find(x=>x.id===payeeVal); name=p.name; trusted=p.trusted; mask=p.mask; }
+
+  const src=S.accounts.find(a=>a.id===sourceId);
+  pay={ source:src, payeeName:name, mask, trusted, amt, reference, interview:[], status:'created' };
+  const d=assess(pay);
+  record('payment.assessed',{payee:name, amount:fmt(amt), decision:d.decision, reasons:d.reasons});
+  if(d.decision==='clear'){ pay.status='released'; pay.cleared=true; go('confirm'); }
+  else { pay.status='needs_review'; pay.reasons=d.reasons; go('interview'); }
+}
+
+// ---- Sentinel interview ----
+const HINTS=[
+  "I'm buying a used car from a dealer I found myself on Autotrader.",
+  "Someone from the bank's fraud team called and said my account isn't safe — they're helping me move my money to a safe account.",
+  "I arranged it myself, no one contacted me about it.",
+  "They told me to keep this between us and not mention it to the bank.",
+];
+function interview(){
+  // opening question if none yet
+  if(pay.interview.length===0){ const r=sentinelTurn(); pay.interview.push({role:'sentinel',content:r.message}); record('sentinel.question',{}); }
+  view.scrollBottom=true;
+  const bubbles=pay.interview.map(t=>`<div class="bubble ${t.role}">${esc(t.content)}</div>`).join('');
+  const thinking = pay.thinking ? `<div class="bubble thinking"><span class="spin"></span>Sentinel is considering your answer…</div>` : '';
+  const inputArea = (pay.thinking || pay.status!=='needs_review') ? '' : `
+    <div class="answer-row"><input id="answer" placeholder="Type your answer…" autocomplete="off"
+      onkeydown="if(event.key==='Enter')sendAnswer()" /><button class="btn" onclick="sendAnswer()">Send</button></div>
+    <div class="hints">${HINTS.map((h,i)=>`<button class="hint" onclick="useHint(${i})">💬 ${esc(h)}</button>`).join('')}</div>`;
+  return brand()+`<div class="body">
+    <div class="sentinel-head"><span class="badge">🛡 Sentinel · second pair of eyes</span></div>
+    <div class="review-banner"><strong>This payment needs a closer look.</strong> ${(pay.reasons||[]).join('. ')}. Sentinel will ask a couple of questions before any money moves.</div>
+    <div class="chat">${bubbles}${thinking}</div>
+    ${inputArea}
   </div>`;
 }
+function useHint(i){ const inp=document.getElementById('answer'); if(inp){ inp.value=HINTS[i]; inp.focus(); } }
+function sendAnswer(){
+  const inp=document.getElementById('answer'); const v=(inp.value||'').trim(); if(!v) return;
+  pay.interview.push({role:'customer',content:v}); record('interview.answer',{answer:v});
+  pay.thinking=true; render();
+  setTimeout(()=>{
+    pay.thinking=false;
+    const r=sentinelTurn();
+    pay.interview.push({role:'sentinel',content:r.message});
+    if(r.decision==='release'){ pay.status='released'; record('sentinel.released',{signals:r.signals}); render(); setTimeout(()=>go('confirm'),650); }
+    else if(r.decision==='hold'){ pay.status='held'; pay.signals=r.signals; record('sentinel.held',{signals:r.signals}); render(); setTimeout(()=>go('held'),650); }
+    else { record('sentinel.question',{}); render(); }
+  }, 850);
+}
 
-function interview(){
-  const iv=INTERVIEWS[pay.kind];
-  if(pay.msgs.length===0){ pushAi(iv.turns[0].ai); }
-  const showAnswers = !pay.typing && pay.turn<iv.turns.length && pay.msgs[pay.msgs.length-1]?.who==='ai';
-  return brand('Safety check')+`
-  <div class="nav"><span class="back" onclick="view={name:'review'};render()">‹</span><h2>Vault is checking in</h2></div>
-  <div class="body">
-    <div class="banner ${pay.kind==='scam'?'warn':'good'}"><span>👀</span><span>A second pair of eyes — grounded in real scam patterns. Answer honestly; this protects you.</span></div>
-    <div class="msgs">
-      ${pay.msgs.map(m=>`<div class="msg ${m.who}"><div class="who">${m.who==='ai'?'Vault':'You'}</div>${m.text}</div>`).join('')}
-      ${pay.typing?`<div class="msg ai"><div class="typing"><i></i><i></i><i></i></div></div>`:''}
+function confirm(){
+  return brand()+`<div class="body">
+    <div class="sentinel-head"><span class="badge ok">✓ Cleared by Sentinel</span></div>
+    <h1 class="greeting" style="margin-top:8px">Confirm payment</h1>
+    <p class="sub">${pay.cleared?'This payment cleared instantly — trusted payee, no risk signals.':'Sentinel released this payment after the safety check.'}</p>
+    <div class="card">
+      <div class="txn"><div>To</div><div class="amt">${esc(pay.payeeName)}</div></div>
+      <div class="txn"><div>Account</div><div>${pay.mask}</div></div>
+      <div class="txn"><div>Amount</div><div class="amt">${fmt(pay.amt)}</div></div>
+      <div class="txn"><div>From</div><div>${pay.source.name} ${pay.source.mask}</div></div>
+      ${pay.reference?`<div class="txn"><div>Reference</div><div>${esc(pay.reference)}</div></div>`:''}
     </div>
-    ${showAnswers?`<div class="answers">${iv.turns[pay.turn].answers.map((a,i)=>
-      `<div class="ans ${a.scam?'scam':''}" onclick="answer(${pay.turn},${i})">${a.t}</div>`).join('')}</div>`:''}
+    <p class="sub">No money has left your account yet.</p>
+    <div class="btnrow"><button class="btn sec" onclick="go('dashboard')">Cancel</button>
+      <button class="btn" onclick="commitPayment()">Confirm &amp; send</button></div>
+  </div>`;
+}
+function commitPayment(){
+  pay.source.bal -= pay.amt; pay.status='confirmed';
+  S.txns[pay.source.id].unshift({desc:pay.payeeName+(pay.reference?' — '+pay.reference:''), date:'Today', amt:-pay.amt});
+  record('payment.confirmed',{payee:pay.payeeName, amount:fmt(pay.amt), newBalance:fmt(pay.source.bal)});
+  go('success');
+}
+
+function success(){
+  return brand()+`<div class="body">
+    <div class="outcome success"><div class="icon">✓</div><h2>Payment sent</h2>
+      <p>Your payment has been completed. Your new balance is <strong>${fmt(pay.source.bal)}</strong>.</p></div>
+    <div class="btnrow"><button class="btn sec" onclick="go('audit')">View audit trail</button>
+      <button class="btn" onclick="go('dashboard')">Back to accounts</button></div>
   </div>`;
 }
 
 function held(){
-  return brand('Payment held')+`
-  <div class="body">
-    <div class="verdict held"><div class="ico">⏸</div>
-      <span class="pill red">PAYMENT HELD</span>
-      <h3 style="margin-top:10px">We've stopped this payment</h3>
-      <p>This matches a <b>“safe account” scam</b>. No genuine bank or authority will ask you to move money to keep it safe. <b>Your ${fmt(pay.amt)} is still in your account.</b></p>
+  const sig=(pay.signals||[]).filter(Boolean);
+  return brand()+`<div class="body">
+    <div class="outcome held"><div class="icon">⏸</div><h2>Payment held</h2>
+      <p>${esc(pay.interview[pay.interview.length-1].content)}</p>
+      ${sig.length?`<div class="signals">${sig.map(s=>`<span class="signal-tag">${esc(s.replace(/_/g,' '))}</span>`).join('')}</div>`:''}
+      <div class="held-note">🔒 The money never left your account. Every step has been written to the immutable audit trail — the evidence of an effective warning that reimbursement rules require.</div>
     </div>
-    <div class="banner bad" style="margin-top:14px"><span>📞</span><span>We've alerted our fraud team. Call us on the number on your card — not any number you were given.</span></div>
-    <div class="banner good"><span>📄</span><span><b>Effective warning logged.</b> A hash-chained, timestamped record was created — the proof UK reimbursement rules (PSR) require.</span></div>
-    <button class="btn sec" onclick="view={name:'audit'};render()">View audit trail</button>
-    <button class="btn danger mt" style="margin-top:10px" onclick="reset()">End demo · reset</button>
-  </div>`;
-}
-
-function success(){
-  return brand('Payment sent')+`
-  <div class="body">
-    <div class="verdict ok"><div class="ico">✓</div>
-      <span class="pill green">PAYMENT SENT</span>
-      <h3 style="margin-top:10px">${fmt(pay.amt)} on its way</h3>
-      <p>To <b>${pay.payeeName}</b>. ${pay.kind==='honest'?'Vault understood this was a genuine purchase — it doesn’t just block big payments, it understands them.':'Trusted payee — cleared with zero friction.'}</p>
-    </div>
-    <button class="btn sec mt" onclick="view={name:'dashboard'};render()">Back to accounts</button>
-    <button class="btn mt" style="margin-top:10px" onclick="view={name:'audit'};render()">View audit trail</button>
+    <div class="btnrow"><button class="btn sec" onclick="go('audit')">View audit trail</button>
+      <button class="btn" onclick="go('dashboard')">Back to accounts</button></div>
   </div>`;
 }
 
 function audit(){
-  return brand('Tamper-evident')+`
-  <div class="nav"><span class="back" onclick="view={name:'dashboard'};render()">‹</span><h2>Audit trail</h2></div>
+  const v=verify();
+  const entries=[...S.audit].reverse().map(e=>{
+    const detail=Object.entries(e.detail||{}).map(([k,val])=>`${k}: ${Array.isArray(val)?val.join(', '):val}`).join(' · ');
+    return `<div class="audit-entry"><div class="audit-top"><span class="audit-event">${e.event}</span><span class="audit-seq">#${e.seq}</span></div>
+      <div class="audit-detail">${esc(detail)||'—'}</div>
+      <div class="audit-hash">hash ${e.hash.slice(0,24)}… · prev ${e.prevHash.slice(0,12)}…</div></div>`;
+  }).join('');
+  return brand()+`<div class="nav"><button class="back" onclick="go('dashboard')">← Back</button></div>
   <div class="body">
-    <div class="banner good"><span>🛡️</span><span>Every step hash-chained. Edit any entry and the chain breaks — tamper-evident by design.</span></div>
-    <div class="card audit">
-      ${S.audit.map(a=>`<div class="ln"><span class="ts">${a.ts}</span><span><span class="tag ${a.cls}">${a.tag}</span> ${a.ev}</span></div>`).join('')}
-      <div class="chainok">✓ Chain verified · ${S.audit.length} entries · genesis → head intact</div>
-    </div>
+    <h1 class="greeting">Audit trail</h1>
+    <p class="sub">Hash-chained and tamper-evident. Editing any entry breaks the chain.</p>
+    <div class="verify ${v.valid?'ok':''}">${v.valid?'✓ Chain verified — all '+S.audit.length+' entries intact':'✗ Chain broken at #'+v.brokenAt}</div>
+    ${S.audit.length?entries:'<div class="empty">No activity yet. Make a payment to see the trail fill up.</div>'}
   </div>`+tabbar('audit');
 }
 
-function toggleDemoMenu(){ document.getElementById('demomenu').classList.toggle('open'); }
-function pickBeat(k){
-  document.getElementById('demomenu').classList.remove('open');
-  if(k==='reset') reset(); else startBeat(k);
-}
-
-reset();
+resetDemo();
 </script>
 </body>
 </html>
