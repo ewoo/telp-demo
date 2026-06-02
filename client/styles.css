@@ -47,6 +47,7 @@ body {
 .nav-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
 .nav-btn.ghost { border: 1px solid rgba(255,255,255,0.2); }
 .who { color: #9fb3cc; font-size: 13px; margin: 0 6px 0 10px; font-weight: 500; }
+.internal-tag { background: #3a1212; color: #ffb3b3; border: 1px solid #5a2a2a; padding: 5px 11px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: .6px; }
 
 /* ── Layout ──────────────────────────────────────────── */
 .app { flex: 1; max-width: 880px; width: 100%; margin: 0 auto; padding: 28px 20px 50px; }

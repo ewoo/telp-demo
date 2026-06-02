@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fortress — The most secure account on the market</title>
+  <title>Fortress · Security Operations (Internal)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -19,26 +19,22 @@
         <path d="M13.5 14v-1.5a2.5 2.5 0 0 1 5 0V14" fill="none" stroke="#0B1F3A" stroke-width="1.4"/>
       </svg>
       <div class="brand-text">
-        <span class="brand-name">Fortress</span>
-        <span class="brand-tag">The most secure account on the market</span>
+        <span class="brand-name">Fortress · Security Operations</span>
+        <span class="brand-tag">Internal threat-intelligence console — analyst access only</span>
       </div>
     </div>
     <nav class="nav">
-      <button data-route="dashboard" class="nav-btn">Accounts</button>
-      <button data-route="audit" class="nav-btn">Audit trail</button>
-      <span class="posture-badge" id="posture-badge" title="Fortress security posture"></span>
-      <span class="who" id="who"></span>
+      <span class="internal-tag">🔒 INTERNAL</span>
       <button id="reset" class="nav-btn ghost" title="Reset demo to seed state">Reset</button>
     </nav>
   </header>
 
-  <main id="app" class="app"></main>
+  <main id="soc" class="app"></main>
 
   <footer class="foot">
-    <span id="sentinel-status" class="sentinel-status"></span>
-    <span class="foot-note">Fortress is a concept build · Team 7 · Sentinel watches every payment</span>
+    <span class="foot-note">Restricted internal system · production access gated by staff SSO + role-based access control</span>
   </footer>
 
-  <script src="app.js"></script>
+  <script src="soc.js"></script>
 </body>
 </html>

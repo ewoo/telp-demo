@@ -100,17 +100,18 @@ for hot patterns                        lower bar to hold; may mandate step-up
 
 ---
 
-## 5. Screens & UX — is the threat feed a new screen?
+## 5. Screens & UX — a separate internal surface
 
-**Yes — one new screen, but it's an *internal* surface, not a customer one.** This split is deliberate and realistic: bank customers never see threat intel; security analysts do.
+The threat-intel console is a **separate page at its own URL (`/soc`)**, **not linked from the customer app** — because bank customers never see threat intel; analysts do. (Separation for the demo; production gates `/soc` behind staff SSO + role-based access control.)
 
-| Surface | Audience | What it shows |
-|---|---|---|
-| **🛰 Threat Intel / SOC console** *(new screen)* | Internal (analyst view) | Threat vectors **pre-loaded in an "armed / pending" state**, each activated with **one click** — so going live on stage is a single button press, no typing. Shows severity + current posture. This is where the "before/after" is driven. |
-| **Posture badge** *(top bar, always visible)* | Both | A small chip — `Posture: Normal / Heightened / Lockdown` — so the effect is visible during the customer flow. |
-| **Inline advisory banner** *(in the payment/interview)* | Customer-facing | When a payment matches an active vector: *"⚠ Extra care: there's currently a surge in scams impersonating Thames Water. Sentinel is taking additional precautions."* |
+| Surface | URL | Audience | What it shows |
+|---|---|---|---|
+| **Customer banking app** | `/` | Customer | Accounts, payments, Sentinel, audit. **No threat-intel link.** |
+| **🛰 Security Operations console** | `/soc` | Internal (analyst) | Threat vectors **pre-armed (pending)**, each activated with **one click**; current posture; severity. Marked `🔒 INTERNAL`. This is where the "before/after" is driven on stage. |
+| **Posture badge** *(top bar of the customer app)* | `/` | Customer | A small chip — `Posture: Heightened / Lockdown` — a legitimate customer-facing "heightened security" signal; flips on a ~2s poll. Hidden at Normal. |
+| **Inline advisory** *(in the payment/interview)* | `/` | Customer | The review banner names the advisory that flagged the payment, e.g. *"Trusted payee under active threat advisory — Thames Water billing-scam surge."* |
 
-So the **feed is its own screen** (the internal console), and its **effect surfaces inside the existing customer screens** via the posture badge and the advisory banner. The demo narrative becomes: *"Here's what our security operations sees — and here's how, the instant a threat goes live, it changes what the customer experiences."*
+So the demo is genuinely **two windows, two URLs**: open `/soc` on one, the customer app on the other. The narrative: *"Here's what our security operations sees — and here's how, the instant a threat goes live, it changes what the customer experiences."*
 
 ---
 

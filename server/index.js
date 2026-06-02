@@ -237,7 +237,11 @@ app.post('/api/demo/reset', (req, res) => {
   res.json({ ok: true });
 });
 
-// Serve the built/static client.
+// Internal Security Operations console — separate URL, NOT linked from the
+// customer app. (Demo separation; production gates this behind staff SSO + RBAC.)
+app.get('/soc', (req, res) => res.sendFile(path.join(__dirname, '..', 'client', 'soc.html')));
+
+// Serve the static client.
 app.use(express.static(path.join(__dirname, '..', 'client')));
 
 app.listen(PORT, () => {
