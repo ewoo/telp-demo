@@ -8,15 +8,14 @@ Interactive UX prototype for **Team 7 · Fortress** (security as the product), w
 
 The **🛰 Threat Intel** tab is the internal **SOC console**: four pre-armed threat vectors, each with a one-click **ACTIVATE**. Activating one raises Fortress's **defense posture** (the badge in the top bar flips to *Heightened* / *Lockdown*) and changes customer-facing behaviour live.
 
-The money shot:
+The money shot — the **same payment, paid twice**:
 
-1. **Threat Intel tab → ACTIVATE** the *Thames Water billing-scam surge* (posture → Heightened).
-2. **Pay → ⭐ Living Trust · Thames Water bill £42** → even though Thames Water is a *trusted* payee paid for years, the active advisory **overrides its trust** and Sentinel runs a scoped check: *"did you get a call/text prompting this, or is it your normal bill?"*
-   - **"Just my normal monthly bill"** → released ✓
-   - **"I got a text saying I'm in arrears"** → **HELD** (unexpected-prompt fingerprint)
-3. **Control · British Gas bill £90** (also trusted, *not* targeted) → still **clears instantly** — proving the re-screening is surgical, scoped to the one biller the world flagged.
+1. **Pay → ⭐ Living Trust · Thames Water bill £42** (before any threat) → **clears instantly**. *"Your water bill, paid the way it has for two years."*
+2. **Threat Intel tab → ACTIVATE** the *Thames Water billing-scam surge* (posture → Heightened; an external threat is detected in the wild).
+3. **Pay → ⭐ Living Trust · Thames Water bill £42 again** → now Fortress **blocks it automatically**, attributed to the live advisory: *"Fortress detected an active scam impersonating Thames Water right now — we've blocked this payment."* No money moves.
+4. **Control · British Gas bill £90** (also trusted, *not* targeted) → still **clears instantly** — proving the block is surgical, scoped to the one biller the world just flagged.
 
-> *"Two trusted payments. Only one re-screened — the one the world just flagged. Same trust status, different behaviour, live."*
+> *"Same trusted payment. It went through this morning. This afternoon — because an attack on that exact company appeared in the wild — Fortress blocked it. Live, in seconds, not quarters."*
 
 ## How to run it
 

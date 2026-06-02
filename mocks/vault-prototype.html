@@ -169,6 +169,8 @@
   .threat-directive{font-size:12px;color:var(--ink);margin-top:8px;line-height:1.45;background:#f7f9fc;border-radius:8px;padding:9px 11px}
   .threat-foot{display:flex;justify-content:space-between;align-items:center;margin-top:11px;gap:10px}
   .threat-status{font-size:11.5px;font-weight:700;color:var(--muted)}
+  .block-flag{background:#3a1620;color:#ffd2d2;border:1px solid #5b2330;border-radius:11px;padding:9px 12px;
+    font-size:12px;font-weight:800;text-align:center;margin-bottom:12px;letter-spacing:.2px}
 
   .tabbar{flex:0 0 auto;height:56px;border-top:1px solid var(--line);background:#fff;display:flex;justify-content:space-around;align-items:center;padding-bottom:4px}
   .tab{font-size:10px;color:var(--muted);text-align:center;cursor:pointer;background:none;border:none}
@@ -492,6 +494,14 @@ function submitPayment(){
   const d=assess(pay);
   pay.advisories=d.advisories||[];
   record('payment.assessed',{payee:name, amount:fmt(amt), decision:d.decision, reasons:d.reasons, posture:posture(), advisories:pay.advisories.map(a=>a.id)});
+  // EXTERNAL THREAT BLOCK: an active entity-scoped advisory on this payee → hard block.
+  const blocking=advisoriesTargeting(pay.payeeName)[0];
+  if(blocking){
+    pay.status='held'; pay.blockedAdvisory=blocking;
+    pay.signals=['external_threat_detected', blocking.id];
+    record('payment.blocked',{payee:name, amount:fmt(amt), advisory:blocking.id, posture:posture()});
+    go('held'); return;
+  }
   if(d.decision==='clear'){ pay.status='released'; pay.cleared=true; go('confirm'); }
   else { pay.status='needs_review'; pay.reasons=d.reasons; go('interview'); }
 }
@@ -576,9 +586,15 @@ function success(){
 
 function held(){
   const sig=(pay.signals||[]).filter(Boolean);
+  const a=pay.blockedAdvisory;
+  const title = a ? 'Payment blocked' : 'Payment held';
+  const msg = a
+    ? `Fortress's threat intelligence has detected an <b>active scam impersonating ${esc(a.targetPayee)} right now</b> (advisory ${esc(a.id)}). As a precaution we've automatically blocked this payment. No money has left your account — if this is your genuine bill, please confirm using the number on the back of your card.`
+    : esc(pay.interview[pay.interview.length-1].content);
   return brand()+`<div class="body">
-    <div class="outcome held"><div class="icon">⏸</div><h2>Payment held</h2>
-      <p>${esc(pay.interview[pay.interview.length-1].content)}</p>
+    ${a?`<div class="block-flag">🛰 Blocked by live threat intelligence</div>`:''}
+    <div class="outcome held"><div class="icon">${a?'🛑':'⏸'}</div><h2>${title}</h2>
+      <p>${msg}</p>
       ${sig.length?`<div class="signals">${sig.map(s=>`<span class="signal-tag">${esc(s.replace(/_/g,' '))}</span>`).join('')}</div>`:''}
       <div class="held-note">🔒 The money never left your account. Every step has been written to the immutable audit trail — the evidence of an effective warning that reimbursement rules require.</div>
     </div>
