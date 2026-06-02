@@ -11,6 +11,7 @@ const { getState, reset, pounds, findAccount } = require('./data');
 const rules = require('./rules');
 const audit = require('./audit');
 const sentinel = require('./claude');
+const threatfeed = require('./threatfeed');
 
 const app = express();
 app.use(express.json());
@@ -85,9 +86,12 @@ app.post('/api/payments/assess', (req, res) => {
   };
 
   const decision = rules.assess(payment);
+  payment.advisories = decision.advisories || []; // advisories that flagged it
   audit.record('payment.assessed', {
     paymentId: payment.id, amount: pounds(amountPence), payee: payment.payeeName,
     decision: decision.decision, reasons: decision.reasons,
+    posture: threatfeed.posture(),
+    advisories: payment.advisories.map((a) => a.id),
   }, now());
 
   if (decision.decision === 'clear') {
@@ -98,7 +102,8 @@ app.post('/api/payments/assess', (req, res) => {
 
   payment.status = 'needs_review';
   state.payments[payment.id] = payment;
-  res.json({ paymentId: payment.id, decision: 'needs_review', reasons: decision.reasons, status: 'needs_review' });
+  res.json({ paymentId: payment.id, decision: 'needs_review', reasons: decision.reasons, status: 'needs_review',
+    advisories: payment.advisories.map((a) => ({ id: a.id, name: a.name })) });
 });
 
 // Step 2: interview turn. Sentinel reads the answer and decides.
@@ -116,7 +121,13 @@ app.post('/api/payments/interview', async (req, res) => {
     audit.record('interview.answer', { paymentId, answer: answer.trim() }, now());
   }
 
-  const result = await sentinel.runTurn(payment, payment.interview);
+  // Live advisories relevant to this payment, read FRESH each turn so the agent's
+  // behaviour reflects the current threat feed (the mid-conversation live change).
+  const relevantAdvisories = [
+    ...threatfeed.advisoriesTargeting(payment.payeeName),
+    ...threatfeed.activeThreats().filter((a) => !a.targetPayee),
+  ];
+  const result = await sentinel.runTurn(payment, payment.interview, relevantAdvisories);
 
   // Hard turn cap → FAIL-CLOSED. If Sentinel still wants to continue past the
   // cap, the server overrides to a hold for human review.
@@ -130,12 +141,13 @@ app.post('/api/payments/interview', async (req, res) => {
 
   payment.interview.push({ role: 'sentinel', content: message });
 
+  const advisoryIds = relevantAdvisories.map((a) => a.id);
   if (decision === 'release') {
     payment.status = 'released';
-    audit.record('sentinel.released', { paymentId, engine: result.engine, signals: result.signals }, now());
+    audit.record('sentinel.released', { paymentId, engine: result.engine, signals: result.signals, posture: threatfeed.posture(), advisories: advisoryIds }, now());
   } else if (decision === 'hold') {
     payment.status = 'held';
-    audit.record('sentinel.held', { paymentId, engine: result.engine, signals: result.signals }, now());
+    audit.record('sentinel.held', { paymentId, engine: result.engine, signals: result.signals, posture: threatfeed.posture(), advisories: advisoryIds }, now());
   } else {
     audit.record('sentinel.question', { paymentId, engine: result.engine }, now());
   }
@@ -190,6 +202,25 @@ app.post('/api/payments/confirm', (req, res) => {
   const result = { paymentId, status: 'confirmed', newBalance: pounds(source.balancePence), newBalancePence: source.balancePence };
   if (idempotencyKey) committedKeys.set(idempotencyKey, result);
   res.json(result);
+});
+
+// ── Threat-intelligence feed (SOC console) ─────────────────────────────────
+app.get('/api/threats', (req, res) => {
+  res.json({ threats: threatfeed.listThreats(), posture: threatfeed.posture() });
+});
+
+app.post('/api/threats/activate', (req, res) => {
+  const t = threatfeed.activate(req.body.id);
+  if (!t) return res.status(404).json({ error: 'Threat not found' });
+  audit.record('threat.activated', { id: t.id, name: t.name, posture: threatfeed.posture() }, now());
+  res.json({ threat: t, posture: threatfeed.posture() });
+});
+
+app.post('/api/threats/deactivate', (req, res) => {
+  const t = threatfeed.deactivate(req.body.id);
+  if (!t) return res.status(404).json({ error: 'Threat not found' });
+  audit.record('threat.deactivated', { id: t.id, name: t.name, posture: threatfeed.posture() }, now());
+  res.json({ threat: t, posture: threatfeed.posture() });
 });
 
 // ── Audit trail ────────────────────────────────────────────────────────────

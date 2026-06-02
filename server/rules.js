@@ -4,14 +4,27 @@
 // low-risk payment to a trusted payee clears here with zero friction.
 
 const { getState } = require('./data');
+const threatfeed = require('./threatfeed');
 
 function assess(payment) {
   const { config } = getState();
   const reasons = [];
 
+  // LIVING TRUST: an active entity-scoped advisory OVERRIDES a payee's trusted
+  // status. A bill that normally clears silently is re-screened the moment the
+  // world flags that biller.
+  const targeting = threatfeed.advisoriesTargeting(payment.payeeName);
+  if (targeting.length) {
+    return {
+      decision: 'needs_review',
+      reasons: [`Trusted payee under active threat advisory — ${targeting[0].name}`],
+      advisories: targeting,
+    };
+  }
+
   // Trusted, previously-paid payee within normal pattern → clear, no friction.
   if (payment.payeeTrusted) {
-    return { decision: 'clear', reasons: ['Trusted payee, paid before'] };
+    return { decision: 'clear', reasons: ['Trusted payee, paid before'], advisories: [] };
   }
 
   // New payee over the review threshold → needs a closer look.
@@ -25,11 +38,11 @@ function assess(payment) {
   if (cueHit) reasons.push(`Reference matches a known scam cue ("${cueHit}")`);
 
   if (reasons.length > 0) {
-    return { decision: 'needs_review', reasons };
+    return { decision: 'needs_review', reasons, advisories: threatfeed.activeThreats() };
   }
 
   // Small payment to a new payee, no cues → clear.
-  return { decision: 'clear', reasons: ['Below new-payee review threshold'] };
+  return { decision: 'clear', reasons: ['Below new-payee review threshold'], advisories: [] };
 }
 
 // Hard limits enforced at commit time regardless of the AI decision.

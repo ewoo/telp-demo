@@ -74,6 +74,63 @@ const SEED = () => ({
       'hmrc', 'police', 'arrest', 'urgent', 'do not tell', 'keep this between us'],
   },
 
+  // Threat-intelligence feed. Vectors are seeded ARMED (active:false) and flipped
+  // on live from the SOC console. Reset restores them all to armed/inactive.
+  threats: [
+    {
+      id: 'TIV-2026-031',
+      name: 'Thames Water billing-scam surge',
+      category: 'impersonation / APP',
+      severity: 'HIGH',
+      trend: '+280% this week',
+      posture: 'HEIGHTENED',
+      targetPayee: 'Thames Water', // entity-scoped → overrides this payee's trust
+      indicators: ['arrears', 'overdue', 'refund', 'final notice', 'unexpected bill prompt'],
+      directive: 'Even for the TRUSTED Thames Water payee, pause and run a short, targeted check. Ask whether the customer was prompted (text/call/email) about their bill. Hold on an unexpected-prompt fingerprint; release if it is plainly their normal recurring bill.',
+      stepUp: 'none',
+      active: false,
+    },
+    {
+      id: 'TIV-2026-014',
+      name: 'Safe-account bank-impersonation surge',
+      category: 'impersonation / APP',
+      severity: 'HIGH',
+      trend: '+340% this week',
+      posture: 'HEIGHTENED',
+      targetPayee: null,
+      indicators: ['safe account', 'fraud team', 'compromised', 'move your money'],
+      directive: 'Probe the safe-account pattern explicitly; warn the customer this exact scam is active right now; lower the bar to hold.',
+      stepUp: 'none',
+      active: false,
+    },
+    {
+      id: 'TIV-2026-008',
+      name: 'AI voice-clone impersonation campaign',
+      category: 'account takeover / impersonation',
+      severity: 'HIGH',
+      trend: 'emerging 🔥',
+      posture: 'HEIGHTENED',
+      targetPayee: null,
+      indicators: ['phone call', 'voice', 'relative', 'urgent'],
+      directive: 'Cloned voices are defeating phone auth in the wild. Treat phone/voice-prompted payments with extra suspicion. Production response is a device-bound passkey step-up (roadmap / Phase B).',
+      stepUp: 'passkey (Phase B)',
+      active: false,
+    },
+    {
+      id: 'TIV-2026-021',
+      name: 'SIM-swap + credential-stuffing ATO',
+      category: 'account takeover',
+      severity: 'CRITICAL',
+      trend: 'active',
+      posture: 'LOCKDOWN',
+      targetPayee: null,
+      indicators: ['new device', 'sms otp', 'impossible travel'],
+      directive: 'Treat SMS OTP as compromised. Production response: mandatory device-bound passkey step-up (roadmap / Phase B).',
+      stepUp: 'passkey (Phase B)',
+      active: false,
+    },
+  ],
+
   // In-flight payments — the server-authoritative state machine lives here.
   // status: created → needs_review → released|held → confirmed
   payments: {},

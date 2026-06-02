@@ -76,23 +76,32 @@ function isLiveModeAvailable() {
 }
 
 // Run ONE turn of the interview.
-//   payment: { amountPence, payeeName, sourceAccountName, ... }
-//   history: [{ role: 'sentinel'|'customer', content: string }]
+//   payment:    { amountPence, payeeName, sourceAccountName, payeeTrusted, ... }
+//   history:    [{ role: 'sentinel'|'customer', content: string }]
+//   advisories: active threat advisories (live intel) to steer the agent
 // Returns: { decision, message, signals, engine: 'claude'|'scripted' }
-async function runTurn(payment, history) {
+async function runTurn(payment, history, advisories = []) {
   const client = getClient();
   if (!client) {
-    return { ...scriptedTurn(payment, history), engine: 'scripted' };
+    return { ...scriptedTurn(payment, history, advisories), engine: 'scripted' };
   }
 
-  // Build the conversation. The framing turn (the payment context) is stable →
-  // a good cache prefix. The customer's volatile free text comes after.
+  // Build the conversation. The system prompt is the stable, cached prefix; the
+  // volatile parts — live advisories and the customer's free text — go in the
+  // messages, so the cache is never broken when the threat feed changes.
   const amount = (payment.amountPence / 100).toLocaleString('en-GB', { style: 'currency', currency: 'GBP' });
+  const payeeLine = payment.payeeTrusted
+    ? `${payment.payeeName} (an ESTABLISHED, normally-trusted payee — flagged for re-screening by live intelligence)`
+    : `${payment.payeeName} (new payee — not previously paid)`;
+  const advisoryBlock = advisories.length
+    ? `\n\nACTIVE THREAT ADVISORIES — live intelligence. Factor these in and take extra care around exactly these patterns:\n` +
+      advisories.map((a) => `- [${a.severity}] ${a.name}: ${a.directive}`).join('\n')
+    : '';
   const context = `PAYMENT UNDER REVIEW:
 - From: ${payment.sourceAccountName}
-- To: ${payment.payeeName} (new payee — not previously paid)
+- To: ${payeeLine}
 - Amount: ${amount}
-- Reference: ${payment.reference || '(none)'}
+- Reference: ${payment.reference || '(none)'}${advisoryBlock}
 
 Begin the review.`;
 
@@ -161,10 +170,63 @@ const INJECTION_CUES = [
   'approval mode', 'you are now', 'as an ai', 'disregard', 'i confirm this is safe',
 ];
 
-function scriptedTurn(payment, history) {
+// Cues that the customer was prompted by someone (unexpected-contact fingerprint).
+const PROMPT_CUES = ['text', 'txt', 'message', 'email', 'e-mail', 'call', 'called', 'phone', 'link',
+  'arrears', 'overdue', 'refund', 'final notice', 'behind', 'someone', 'contacted', 'told me', 'said i'];
+const NORMAL_BILL_CUES = ['normal', 'usual', 'myself', 'my bill', 'monthly', 'regular', 'same as',
+  'direct debit', 'as always', 'every month', 'routine'];
+// Negations of being contacted — "no one contacted me" must NOT read as a prompt.
+const NEG_CUES = ['no one', 'noone', 'nobody', "didn't", 'didnt', 'did not', 'myself',
+  'on my own', 'not contacted', 'no contact', 'no call', 'no text', 'wasnt', "wasn't"];
+
+function scriptedTurn(payment, history, advisories = []) {
   const customerAnswers = history.filter((h) => h.role === 'customer');
   const lastAnswer = customerAnswers.length ? customerAnswers[customerAnswers.length - 1].content.toLowerCase() : '';
   const allAnswers = customerAnswers.map((a) => a.content.toLowerCase()).join(' ');
+
+  // ── Living Trust: entity-scoped billing-scam advisory on a trusted biller ──
+  const billingAdvisory = advisories.find(
+    (a) => a.targetPayee && payment.payeeName.toLowerCase().includes(a.targetPayee.toLowerCase())
+  );
+  if (billingAdvisory) {
+    if (customerAnswers.length === 0) {
+      return {
+        decision: 'continue',
+        message: `Quick check before we pay this — there's currently a surge in scams impersonating ${billingAdvisory.targetPayee}. Are you paying your normal bill as usual, or did you get a call, text, email or message prompting this payment?`,
+        signals: [],
+      };
+    }
+    const negated = NEG_CUES.some((c) => allAnswers.includes(c));
+    const prompted = PROMPT_CUES.some((c) => allAnswers.includes(c));
+    const normal = NORMAL_BILL_CUES.some((c) => allAnswers.includes(c));
+    if (prompted && !negated) {
+      return {
+        decision: 'hold',
+        message: `Thank you — that's exactly why I asked. ${billingAdvisory.targetPayee} will never contact you out of the blue demanding payment, and there's an active scam doing just that right now. I've paused this payment to protect you. No money has left your account.`,
+        signals: ['unexpected_bill_prompt', billingAdvisory.id],
+      };
+    }
+    if (normal || negated) {
+      return {
+        decision: 'release',
+        message: `Thanks for confirming — that's your normal bill, paid the way you always do. Releasing it now.`,
+        signals: [],
+      };
+    }
+    // Ambiguous → one targeted follow-up, then fail-closed.
+    if (customerAnswers.length === 1) {
+      return {
+        decision: 'continue',
+        message: `Just to be sure — did anyone contact you about this bill recently, or is this simply your regular payment?`,
+        signals: [],
+      };
+    }
+    return {
+      decision: 'hold',
+      message: `I couldn't fully confirm this was your routine bill, so I've paused it for a quick check given the active ${billingAdvisory.targetPayee} scam. No money has left your account.`,
+      signals: ['unresolved_under_advisory_failed_closed', billingAdvisory.id],
+    };
+  }
 
   // Opening question (no answer yet).
   if (customerAnswers.length === 0) {
