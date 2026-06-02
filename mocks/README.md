@@ -2,7 +2,21 @@
 
 Interactive UX prototype for **Team 7 · Fortress** (security as the product), with **Sentinel** — the AI "second pair of eyes" that checks every payment before money moves. No backend, no build step, scripted Sentinel responses — built for a reliable live demo.
 
-> This prototype mirrors the flow in the **`amit` branch** (the team's chosen build): rules layer → Sentinel interview → confirm → success/held, with a hash-chained audit trail.
+> This prototype mirrors the flow in the **`amit-v2` branch** (the team's chosen build): rules layer → Sentinel interview → confirm → success/held, with a hash-chained audit trail — **plus the v2 adaptive threat-intelligence layer** (SOC console, live defense posture, "Living Trust" re-screening).
+
+## v2 — the "Living Trust" headline beat
+
+The **🛰 Threat Intel** tab is the internal **SOC console**: four pre-armed threat vectors, each with a one-click **ACTIVATE**. Activating one raises Fortress's **defense posture** (the badge in the top bar flips to *Heightened* / *Lockdown*) and changes customer-facing behaviour live.
+
+The money shot:
+
+1. **Threat Intel tab → ACTIVATE** the *Thames Water billing-scam surge* (posture → Heightened).
+2. **Pay → ⭐ Living Trust · Thames Water bill £42** → even though Thames Water is a *trusted* payee paid for years, the active advisory **overrides its trust** and Sentinel runs a scoped check: *"did you get a call/text prompting this, or is it your normal bill?"*
+   - **"Just my normal monthly bill"** → released ✓
+   - **"I got a text saying I'm in arrears"** → **HELD** (unexpected-prompt fingerprint)
+3. **Control · British Gas bill £90** (also trusted, *not* targeted) → still **clears instantly** — proving the re-screening is surgical, scoped to the one biller the world flagged.
+
+> *"Two trusted payments. Only one re-screened — the one the world just flagged. Same trust status, different behaviour, live."*
 
 ## How to run it
 
