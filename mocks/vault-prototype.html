@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vault — Interactive Prototype (Team 7)</title>
+<style>
+  :root{
+    --ink:#0b1220; --muted:#6b7280; --line:#e9ebf1; --bg:#f4f5f8;
+    --brand:#0a5c4f; --brand2:#12a589; --accent:#1d4ed8;
+    --amber:#b45309; --amberbg:#fff7ed; --greenbg:#ecfdf5; --red:#b91c1c; --redbg:#fef2f2;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-font-smoothing:antialiased;}
+  body{margin:0;background:radial-gradient(1100px 700px at 50% -10%,#16203a,#0a0e1a);color:#e8eaf0;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:32px 16px 64px;}
+  .head{text-align:center;margin-bottom:22px}
+  .head h1{margin:0 0 4px;font-size:24px;letter-spacing:-.3px}
+  .head p{margin:0;color:#9aa3b8;font-size:13px;max-width:560px}
+  .head .beats{margin-top:14px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  .chip{background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:999px;
+    padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+  .chip:hover{background:#243152}
+  .chip.scam{border-color:#5b2330;color:#ffd2d2}
+  .chip.scam:hover{background:#3a1c25}
+
+  /* phone */
+  .phone{width:340px;height:724px;background:#000;border-radius:48px;padding:11px;
+    box-shadow:0 30px 70px rgba(0,0,0,.55),inset 0 0 0 2px #2a2a2a;position:relative}
+  .screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:38px;
+    overflow:hidden;color:var(--ink);display:flex;flex-direction:column}
+  .notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:124px;height:27px;
+    background:#000;border-radius:0 0 18px 18px;z-index:30}
+  .status{height:50px;display:flex;align-items:flex-end;justify-content:space-between;
+    padding:0 26px 8px;font-size:14px;font-weight:600;flex:0 0 auto;background:#fff}
+  .brandbar{background:var(--brand);color:#fff;padding:12px 20px 14px;display:flex;align-items:center;gap:10px;flex:0 0 auto}
+  .brandbar .logo{width:26px;height:26px;border-radius:7px;background:var(--brand2);display:grid;place-items:center;
+    font-weight:800;font-size:14px;color:#042b25}
+  .brandbar b{font-size:15px}
+  .brandbar .sub{margin-left:auto;opacity:.85;font-size:11px}
+  .nav{padding:8px 18px 6px;display:flex;align-items:center;gap:8px;flex:0 0 auto;background:#fff;border-bottom:1px solid var(--line)}
+  .nav .back{color:var(--brand);font-size:24px;line-height:1;cursor:pointer;width:24px}
+  .nav h2{font-size:16px;margin:0;font-weight:700}
+  .body{padding:16px 16px 22px;overflow-y:auto;flex:1 1 auto}
+  .body::-webkit-scrollbar{display:none}
+  .home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:124px;height:5px;background:#00000026;border-radius:999px;z-index:30}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-bottom:12px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+  .acct{display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+  .acct:hover{background:#fafbfc}
+  .acct .nm{font-weight:700;font-size:15px}
+  .acct .ms{color:var(--muted);font-size:12px;margin-top:2px}
+  .acct .bal{font-weight:800;font-size:16px}
+  .label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+  .field{background:#f1f3f7;border-radius:12px;padding:11px 13px;margin-top:6px;font-size:15px;font-weight:600;width:100%;border:1px solid transparent}
+  .field:focus{outline:none;border-color:var(--brand2);background:#fff}
+  select.field{appearance:none}
+  .mt{margin-top:12px}
+  .row{display:flex;justify-content:space-between;align-items:center}
+  .btn{background:var(--brand);color:#fff;border:none;border-radius:14px;padding:15px;width:100%;font-size:16px;font-weight:700;cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+  .btn.sec{background:#eef1f6;color:var(--brand)}
+  .btn.danger{background:var(--red)}
+  .btn:disabled{opacity:.4}
+
+  .txn{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .txn:last-child{border-bottom:none}
+  .txn .d{color:var(--muted);font-size:11.5px;margin-top:2px}
+  .pos{color:var(--brand)}
+
+  .banner{border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.45;display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+  .banner.good{background:var(--greenbg);color:#065f46;border:1px solid #b8efdf}
+  .banner.warn{background:var(--amberbg);color:#7c2d12;border:1px solid #fed7aa}
+  .banner.bad{background:var(--redbg);color:#7f1d1d;border:1px solid #fecaca}
+  .pill{display:inline-block;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px}
+  .pill.green{background:var(--greenbg);color:var(--brand)}
+  .pill.amber{background:var(--amberbg);color:var(--amber)}
+  .pill.red{background:var(--redbg);color:var(--red)}
+
+  /* chat */
+  .msgs{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+  .msg{max-width:84%;padding:11px 13px;border-radius:16px;font-size:13.5px;line-height:1.45}
+  .msg.ai{background:#fff;border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:5px}
+  .msg.me{background:var(--brand);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+  .msg .who{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;opacity:.6;margin-bottom:3px}
+  .typing{display:flex;gap:4px;padding:6px 2px}
+  .typing i{width:7px;height:7px;border-radius:50%;background:#bcc3d4;animation:b 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes b{0%,60%,100%{opacity:.3}30%{opacity:1}}
+  .answers{display:flex;flex-direction:column;gap:8px}
+  .ans{background:#fff;border:1.5px solid var(--brand);color:var(--brand);border-radius:12px;padding:11px 13px;font-size:13px;font-weight:600;cursor:pointer;text-align:left}
+  .ans:hover{background:var(--greenbg)}
+  .ans.scam{border-color:var(--red);color:#7f1d1d}
+  .ans.scam:hover{background:var(--redbg)}
+
+  .verdict{text-align:center;padding:26px 16px;border-radius:18px}
+  .verdict.held{background:linear-gradient(180deg,#fef2f2,#fff);border:1px solid #fecaca}
+  .verdict.ok{background:linear-gradient(180deg,#ecfdf5,#fff);border:1px solid #b8efdf}
+  .verdict .ico{width:66px;height:66px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:32px;color:#fff}
+  .verdict.held .ico{background:var(--red)}.verdict.ok .ico{background:var(--brand2)}
+  .verdict h3{margin:0 0 6px;font-size:21px}
+  .verdict p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+
+  .audit{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px}
+  .audit .ln{display:flex;gap:8px;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .audit .ts{color:var(--muted);flex:0 0 54px}
+  .tag{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:5px;background:#eef1f6;color:var(--accent)}
+  .tag.hold{background:var(--redbg);color:var(--red)}
+  .tag.ok{background:var(--greenbg);color:var(--brand)}
+  .chainok{font-size:11px;color:var(--brand);font-weight:700;margin-top:8px}
+
+  .tabbar{flex:0 0 auto;height:56px;border-top:1px solid var(--line);background:#fff;display:flex;justify-content:space-around;align-items:center;padding-bottom:4px}
+  .tab{font-size:10px;color:var(--muted);text-align:center;cursor:pointer}
+  .tab.active{color:var(--brand);font-weight:700}
+  .tab .gi{font-size:18px;display:block}
+  .resetbtn{position:fixed;top:18px;right:18px;background:#1b2540;color:#cdd6f4;border:1px solid #2c3a63;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;z-index:50}
+  h3.sec{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin:4px 2px 8px}
+  .note{font-size:11px;color:#9aa3b8;margin-top:14px;text-align:center}
+</style>
+</head>
+<body>
+  <button class="resetbtn" onclick="reset()">↺ Reset demo</button>
+  <div class="head">
+    <h1>Vault — security as the product</h1>
+    <p>Two payments. Same amount. Same new payee. A rules engine sees one transaction twice. Vault sees a customer buying a car — and a customer being robbed.</p>
+    <div class="beats">
+      <span class="chip" onclick="startBeat('routine')">▶ Beat 1 · Routine payment</span>
+      <span class="chip" onclick="startBeat('honest')">▶ Beat 2 · Large but honest</span>
+      <span class="chip scam" onclick="startBeat('scam')">▶ Beat 3 · The scam</span>
+    </div>
+  </div>
+
+  <div class="phone"><div class="screen">
+    <div class="notch"></div>
+    <div class="status"><span>9:41</span><span>5G ▪ 100%</span></div>
+    <div id="app"></div>
+    <div class="home"></div>
+  </div></div>
+  <div class="note">Prototype · scripted AI responses · no backend. Use the answer chips in Beat 2 / Beat 3 so every run is identical.</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Vault interactive prototype — all state in memory, scripted AI.
+// ---------------------------------------------------------------------------
+const fmt = p => '£' + (p/100).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+const SEED = () => ({
+  accounts:[
+    {id:'cur',name:'Current Account',mask:'••••3491',sort:'04-00-72',bal:1482055},
+    {id:'sav',name:'Savings',mask:'••••8806',sort:'04-00-72',bal:4210000},
+    {id:'joint',name:'Joint Account',mask:'••••1175',sort:'04-00-72',bal:326510},
+  ],
+  payees:[
+    {id:'ll',name:'The Landlord (Jane Foster)',mask:'••••5520',trusted:true,times:14},
+    {id:'water',name:'Thames Water',mask:'••••9043',trusted:true,times:8},
+    {id:'gas',name:'British Gas',mask:'••••2210',trusted:true,times:11},
+  ],
+  txns:[
+    {desc:'The Landlord — Rent',date:'May 1',amt:-120000},
+    {desc:'ACME Corp — Salary',date:'May 28',amt:340000},
+    {desc:'Tesco',date:'May 27',amt:-6420},
+    {desc:'Thames Water',date:'May 20',amt:-4200},
+    {desc:'British Gas',date:'May 18',amt:-8999},
+    {desc:'Spotify',date:'May 15',amt:-1299},
+    {desc:'From Joint Account',date:'May 12',amt:5000},
+    {desc:'The Landlord — Rent',date:'Apr 1',amt:-120000},
+  ],
+  audit:[{ts:'09:40:00',ev:'Session opened · genesis hash 0x00a1',tag:'INIT',cls:''}],
+});
+
+let S, view, pay; // pay = in-progress payment context
+function reset(){ S = SEED(); view = {name:'dashboard'}; pay = null; render(); }
+
+// ---- AI interview scripts (scripted for demo reliability) ----
+const INTERVIEWS = {
+  honest:{
+    payee:'JD Motors', amt:800000,
+    turns:[
+      {ai:"This is the first time you've paid JD Motors, and it's a large amount. To keep you safe — what's this payment for?",
+       answers:[{t:"Buying a used car from a dealer I found myself",scam:false}]},
+      {ai:"Good. Did anyone contact you and tell you to make this payment, or help you set it up?",
+       answers:[{t:"No, I went to the forecourt and chose the car",scam:false}]},
+    ],
+    verdict:'release',
+  },
+  scam:{
+    payee:'Acct Safety — A Morgan', amt:800000,
+    turns:[
+      {ai:"This is the first time you've paid this account, and it's a large amount. To keep you safe — what's this payment for?",
+       answers:[{t:"Someone from the bank's fraud team said my account isn't safe and I need to move my money",scam:true}]},
+      {ai:"I understand this feels urgent. Vault would never ask you to move money to a “safe account.” Did this person contact you unexpectedly — by call, text or email?",
+       answers:[{t:"Yes, they called me an hour ago and stayed on the phone",scam:true}]},
+      {ai:"Are they asking you to keep this payment secret, or telling you not to discuss it with branch staff?",
+       answers:[{t:"They said not to tell anyone or it could compromise the investigation",scam:true}]},
+    ],
+    verdict:'hold',
+  },
+};
+
+// ---------------------------------------------------------------------------
+function log(ts,ev,tag,cls=''){ S.audit.push({ts,ev,tag,cls}); }
+
+function startBeat(kind){
+  reset();
+  if(kind==='routine'){ // pay trusted landlord, clears instantly
+    pay = {payeeName:'The Landlord (Jane Foster)', mask:'••••5520', amt:120000, trusted:true, isNew:false, kind};
+    view = {name:'review'}; assess();
+  } else {
+    const iv = INTERVIEWS[kind];
+    pay = {payeeName:iv.payee, mask:'••••'+(kind==='scam'?'0000':'7781'), amt:iv.amt, trusted:false, isNew:true, kind, turn:0, msgs:[]};
+    view = {name:'review'}; assess();
+  }
+}
+
+function assess(){
+  // RULES LAYER — no hidden isScam flag; new payee + amount drives review.
+  log('09:41:01', `Assess payment ${fmt(pay.amt)} → ${pay.payeeName}`,'ASSESS');
+  if(pay.trusted){
+    pay.decision='clear'; pay.reason='Trusted payee, established pattern';
+    log('09:41:01','Rules: trusted payee → CLEAR','RULES','ok');
+  } else {
+    pay.decision='needs_review'; pay.reason='New payee over £1,000';
+    log('09:41:01','Rules: new payee + amount → NEEDS REVIEW','RULES');
+  }
+  render();
+}
+
+function beginInterview(){
+  view={name:'interview'};
+  log('09:41:03','AI second pair of eyes engaged','AI');
+  render();
+}
+function pushAi(text){ pay.msgs.push({who:'ai',text}); }
+function answer(turnIdx, ansIdx){
+  const iv = INTERVIEWS[pay.kind];
+  const a = iv.turns[turnIdx].answers[ansIdx];
+  pay.msgs.push({who:'me',text:a.t});
+  log('09:41:0'+(4+turnIdx), 'Customer answer recorded','AI', a.scam?'':'ok');
+  pay.turn++;
+  render();
+  // next AI turn or verdict
+  setTimeout(()=>{
+    if(pay.turn < iv.turns.length){
+      pay.typing=true; render();
+      setTimeout(()=>{ pay.typing=false; pushAi(iv.turns[pay.turn].ai); render(); }, 900);
+    } else {
+      pay.typing=true; render();
+      setTimeout(()=>{ pay.typing=false; resolve(iv.verdict); }, 1000);
+    }
+  }, 350);
+}
+function resolve(v){
+  if(v==='release'){
+    log('09:41:08','No coercion fingerprint → RELEASE','AI','ok');
+    commit();
+  } else {
+    log('09:41:09','Safe-account typology detected → HOLD','AI','hold');
+    log('09:41:09','Payment held · money never left account','HOLD','hold');
+    view={name:'held'}; render();
+  }
+}
+function commit(){
+  const acc = S.accounts.find(a=>a.id==='cur');
+  acc.bal -= pay.amt;
+  S.txns.unshift({desc:pay.payeeName, date:'Today', amt:-pay.amt});
+  log('09:41:09', `Committed ${fmt(pay.amt)} → ${pay.payeeName}`,'COMMIT','ok');
+  view={name:'success'}; render();
+}
+
+// ---------------------------------------------------------------------------
+// RENDER
+// ---------------------------------------------------------------------------
+const el = () => document.getElementById('app');
+function tabbar(active){
+  const t=(k,g,l)=>`<div class="tab ${active===k?'active':''}" onclick="${k==='audit'?"view={name:'audit'};render()":k==='home'?'reset()':''}"><span class="gi">${g}</span>${l}</div>`;
+  return `<div class="tabbar">${t('home','🏠','Accounts')}${t('pay','💸','Pay')}${t('audit','🛡️','Audit')}${t('home2','⚙️','More')}</div>`;
+}
+function brand(sub){return `<div class="brandbar"><span class="logo">V</span><b>Vault</b><span class="sub">${sub||''}</span></div>`;}
+
+function render(){
+  let h='';
+  if(view.name==='dashboard') h=dashboard();
+  else if(view.name==='account') h=account();
+  else if(view.name==='review') h=review();
+  else if(view.name==='interview') h=interview();
+  else if(view.name==='held') h=held();
+  else if(view.name==='success') h=success();
+  else if(view.name==='audit') h=audit();
+  el().innerHTML=h;
+  const b=el().querySelector('.body'); if(b) b.scrollTop=b.scrollHeight*(view.name==='interview'?1:0);
+}
+
+function dashboard(){
+  const total=S.accounts.reduce((s,a)=>s+a.bal,0);
+  return brand('Alex Morgan')+`
+  <div class="body">
+    <div class="card" style="background:var(--brand);color:#fff;border:none">
+      <div class="label" style="color:#bfe9df">Total balance</div>
+      <div style="font-size:30px;font-weight:800;margin-top:4px">${fmt(total)}</div>
+      <div style="font-size:12px;opacity:.85;margin-top:2px">Vault Premier · protected</div>
+    </div>
+    <h3 class="sec">Accounts</h3>
+    ${S.accounts.map(a=>`<div class="card acct" onclick="view={name:'account',id:'${a.id}'};render()">
+      <div><div class="nm">${a.name}</div><div class="ms">${a.mask} · ${a.sort}</div></div>
+      <div class="bal">${fmt(a.bal)}</div></div>`).join('')}
+  </div>`+tabbar('home');
+}
+
+function account(){
+  const a=S.accounts.find(x=>x.id===view.id);
+  const tx=S.txns;
+  return brand('')+`
+  <div class="nav"><span class="back" onclick="view={name:'dashboard'};render()">‹</span><h2>${a.name}</h2></div>
+  <div class="body">
+    <div class="card" style="text-align:center">
+      <div class="label">Available balance</div>
+      <div style="font-size:30px;font-weight:800;margin:4px 0">${fmt(a.bal)}</div>
+      <div class="ms" style="color:var(--muted);font-size:12px">${a.mask} · ${a.sort}</div>
+      <button class="btn mt" onclick="openPay()">Make a payment</button>
+    </div>
+    <h3 class="sec">Recent transactions</h3>
+    <div class="card">${tx.map(t=>`<div class="txn"><div><div>${t.desc}</div><div class="d">${t.date}</div></div>
+      <div class="${t.amt>0?'pos':''}" style="font-weight:700">${t.amt>0?'+':''}${fmt(Math.abs(t.amt))}</div></div>`).join('')}</div>
+  </div>`+tabbar('home');
+}
+function openPay(){ alert('In the live build this opens the payment form.\\nFor the demo, use the Beat chips above the phone to run a scripted payment.'); }
+
+function review(){
+  const clear = pay.decision==='clear';
+  return brand('Payment')+`
+  <div class="nav"><span class="back" onclick="view={name:'dashboard'};render()">‹</span><h2>Review payment</h2></div>
+  <div class="body">
+    <div class="card">
+      <div class="row"><span class="label">To</span><b>${pay.payeeName}</b></div>
+      <div class="row mt"><span class="label">Account</span><span>${pay.mask}</span></div>
+      <div class="row mt"><span class="label">Amount</span><b style="font-size:18px">${fmt(pay.amt)}</b></div>
+      <div class="row mt"><span class="label">From</span><span>Current ••••3491</span></div>
+    </div>
+    ${clear ? `
+      <div class="banner good"><span>✓</span><span><b>Cleared instantly.</b> ${pay.reason}. Vault is invisible when it's safe.</span></div>
+      <button class="btn" onclick="commit()">Confirm payment</button>
+    ` : `
+      <div class="banner warn"><span>🔎</span><span><b>Quick safety check.</b> ${pay.reason}. We'll ask a couple of questions before this leaves your account.</span></div>
+      <button class="btn" onclick="beginInterview()">Continue</button>
+    `}
+    <p style="font-size:11px;color:var(--muted);margin-top:14px">Rules layer: <b>${pay.decision.toUpperCase()}</b> — note a scam payment and an honest one look <i>identical</i> here.</p>
+  </div>`;
+}
+
+function interview(){
+  const iv=INTERVIEWS[pay.kind];
+  if(pay.msgs.length===0){ pushAi(iv.turns[0].ai); }
+  const showAnswers = !pay.typing && pay.turn<iv.turns.length && pay.msgs[pay.msgs.length-1]?.who==='ai';
+  return brand('Safety check')+`
+  <div class="nav"><span class="back" onclick="view={name:'review'};render()">‹</span><h2>Vault is checking in</h2></div>
+  <div class="body">
+    <div class="banner ${pay.kind==='scam'?'warn':'good'}"><span>👀</span><span>A second pair of eyes — grounded in real scam patterns. Answer honestly; this protects you.</span></div>
+    <div class="msgs">
+      ${pay.msgs.map(m=>`<div class="msg ${m.who}"><div class="who">${m.who==='ai'?'Vault':'You'}</div>${m.text}</div>`).join('')}
+      ${pay.typing?`<div class="msg ai"><div class="typing"><i></i><i></i><i></i></div></div>`:''}
+    </div>
+    ${showAnswers?`<div class="answers">${iv.turns[pay.turn].answers.map((a,i)=>
+      `<div class="ans ${a.scam?'scam':''}" onclick="answer(${pay.turn},${i})">${a.t}</div>`).join('')}</div>`:''}
+  </div>`;
+}
+
+function held(){
+  return brand('Payment held')+`
+  <div class="body">
+    <div class="verdict held"><div class="ico">⏸</div>
+      <span class="pill red">PAYMENT HELD</span>
+      <h3 style="margin-top:10px">We've stopped this payment</h3>
+      <p>This matches a <b>“safe account” scam</b>. No genuine bank or authority will ask you to move money to keep it safe. <b>Your ${fmt(pay.amt)} is still in your account.</b></p>
+    </div>
+    <div class="banner bad" style="margin-top:14px"><span>📞</span><span>We've alerted our fraud team. Call us on the number on your card — not any number you were given.</span></div>
+    <div class="banner good"><span>📄</span><span><b>Effective warning logged.</b> A hash-chained, timestamped record was created — the proof UK reimbursement rules (PSR) require.</span></div>
+    <button class="btn sec" onclick="view={name:'audit'};render()">View audit trail</button>
+    <button class="btn danger mt" style="margin-top:10px" onclick="reset()">End demo · reset</button>
+  </div>`;
+}
+
+function success(){
+  return brand('Payment sent')+`
+  <div class="body">
+    <div class="verdict ok"><div class="ico">✓</div>
+      <span class="pill green">PAYMENT SENT</span>
+      <h3 style="margin-top:10px">${fmt(pay.amt)} on its way</h3>
+      <p>To <b>${pay.payeeName}</b>. ${pay.kind==='honest'?'Vault understood this was a genuine purchase — it doesn’t just block big payments, it understands them.':'Trusted payee — cleared with zero friction.'}</p>
+    </div>
+    <button class="btn sec mt" onclick="view={name:'dashboard'};render()">Back to accounts</button>
+    <button class="btn mt" style="margin-top:10px" onclick="view={name:'audit'};render()">View audit trail</button>
+  </div>`;
+}
+
+function audit(){
+  return brand('Tamper-evident')+`
+  <div class="nav"><span class="back" onclick="view={name:'dashboard'};render()">‹</span><h2>Audit trail</h2></div>
+  <div class="body">
+    <div class="banner good"><span>🛡️</span><span>Every step hash-chained. Edit any entry and the chain breaks — tamper-evident by design.</span></div>
+    <div class="card audit">
+      ${S.audit.map(a=>`<div class="ln"><span class="ts">${a.ts}</span><span><span class="tag ${a.cls}">${a.tag}</span> ${a.ev}</span></div>`).join('')}
+      <div class="chainok">✓ Chain verified · ${S.audit.length} entries · genesis → head intact</div>
+    </div>
+  </div>`+tabbar('audit');
+}
+
+reset();
+</script>
+</body>
+</html>
